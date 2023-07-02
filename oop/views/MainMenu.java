@@ -54,16 +54,14 @@ public class MainMenu extends Menu{
     private void showVendorOptions() {
         System.out.println("1. add new Restaurant");
         System.out.println("2. show Restaurants");
-        System.out.println("2. back");
+        System.out.println("3. back");
 
     }
 
     private void showCustomerOptions() {
-        System.out.println("2. buy a product");
-        System.out.println("3. add new service");
-        System.out.println("4. add comment");
-        System.out.println("5. profile");
-
+        System.out.println("1. Show restaurants");
+        System.out.println("2. Search restaurants");
+        System.out.println("3. back");
     }
 
     @Override
@@ -101,21 +99,13 @@ public class MainMenu extends Menu{
     private void handleCustomerChoice(String choice) {
         switch (choice) {
             case "1":
-                this.showRestaurants();
+                this.showRestaurantsForCustomer();
                 break;
             case "2":
-                this.buyProduct();
+                this.searchRestaurant();
                 break;
             case "3":
-                this.addService();
-                break;
-
-            case "4":
-                this.addComment();
-                break;
-
-            case "5":
-                this.goToProfile();
+                RegisterMenu.getInstance().run();
                 break;
 
             default:
@@ -335,13 +325,36 @@ public class MainMenu extends Menu{
 
     }
 
-    private void addComment() {
+    private void showRestaurantsForCustomer() {
+        ArrayList<Restaurant> allRestaurants = this.controller.handleShowRestaurants();
+        System.out.println("Restaurants list :");
+        for (int i=0; i<allRestaurants.size(); i++)
+            System.out.println(allRestaurants.get(i).getID()+". "+allRestaurants.get(i).getName());
+
+        this.chooseRestaurantForCostumer();
+    }
+    private void chooseRestaurantForCostumer() {
+        ArrayList<Restaurant> allRestaurants = this.controller.handleShowRestaurants();
+        String choice = this.getChoice();
+        setCurrentRestaurant(controller.handleChooseRestaurant(choice));
+        this.showRestaurantOptionsForCostumer();
+    }
+    private void showRestaurantOptionsForCostumer() {
+        ArrayList<Food> allFoods = this.controller.handleShowFoods();
+        System.out.println("Foods list :");
+        for (int i=0; i<allFoods.size(); i++)
+            System.out.println(allFoods.get(i).getID()
+                    +". "+allFoods.get(i).getName()+"       "+allFoods.get(i).getPrice()+"$");
+
+        this.chooseFoodForCostumer();
+    }
+    private void chooseFoodForCostumer(){
+        //continue
     }
 
-    private void addService() {
-    }
+    private void searchRestaurant() {
+        String choice = this.getChoice();
 
-    private void buyProduct() {
     }
 
     @Override

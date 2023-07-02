@@ -13,7 +13,7 @@ public class RegisterMenu extends Menu{
         this.controller = RegisterController.getInstance();
     }
 
-    // Singleton Pattern
+    // Singleton  Pattern
     private static void setInstance(RegisterMenu instance) {
         RegisterMenu.instance = instance;
     }

@@ -32,6 +32,9 @@ public class MainController extends Controller{
     public ArrayList<Restaurant> handleShowRestaurants() {
         return Restaurant.getAllRestaurant();
     }
+    public ArrayList<Food> handleShowFoods() {
+        return MainMenu.getCurrentRestaurant().getFood();
+    }
     public Restaurant handleChooseRestaurant(String choice) {
         int i = Integer.parseInt(choice.trim())-1;
         if (i<Restaurant.getAllRestaurant().size())
