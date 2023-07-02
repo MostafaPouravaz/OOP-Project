@@ -47,6 +47,10 @@ public class Restaurant {
         this.locationNode = locationNode;
     }
 
+    public ArrayList<Integer> getFoodType() {
+        return foodType;
+    }
+
     public FoodType getFoodType(int ID) {
         return FoodType.getFoodTypeFromInt(ID);
     }

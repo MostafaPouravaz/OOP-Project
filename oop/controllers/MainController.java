@@ -1,6 +1,8 @@
 package controllers;
 
 import java.util.ArrayList;
+
+import enums.FoodType;
 import enums.Message;
 import models.*;
 import views.MainMenu;
@@ -60,9 +62,24 @@ public class MainController extends Controller{
     public Message handleAddFood(String name, int price, int foodType) {
         User loggedInUser = Menu.getLoggedInUser();
         Restaurant currentRestaurant = MainMenu.getCurrentRestaurant();
-        new Food(name, price, currentRestaurant.getID(), foodType);
-        MainMenu.setCurrentRestaurant(new Restaurant(name, loggedInUser.getUserId(),price));
+        MainMenu.setCurrentFood(new Food(name, price, currentRestaurant.getID(), foodType));
         return Message.SUCCESS;
     }
 
+    public void handleShowLocation() {
+        System.out.println("location of restaurant : "+MainMenu.getCurrentRestaurant().getLocationNode());
+    }
+
+    public void editLocation(String location) {
+        MainMenu.getCurrentRestaurant().setLocationNode(Integer.parseInt(location));
+    }
+
+    public void showFoodTypes() {
+        for (int i=0; i<MainMenu.getCurrentRestaurant().getFoodType().size(); i++)
+            System.out.println((i+1)+". "+ FoodType.getFoodTypeFromInt(MainMenu.getCurrentRestaurant().getFoodType().get(i)));
+    }
+
+    public void editFoodType() {
+
+    }
 }

@@ -83,7 +83,8 @@ public class MainMenu extends Menu{
     }
     public void foodAndFoodTypeOptions() {
         System.out.println("1. add new FoodType");
-        System.out.println("2.  add new Food");
+        System.out.println("2. add new Food");
+        System.out.println("3. back");
         String choice = this.getChoice();
         handleFoodAndFoodTypeChoice(choice);
         foodAndFoodTypeOptions();
@@ -92,6 +93,7 @@ public class MainMenu extends Menu{
         switch (choice) {
             case "1" -> this.addFoodType();
             case "2" -> this.addFood();
+            case "3" -> this.addRestaurant();
             default -> System.out.println(Message.INVALID_CHOICE);
         }
     }
@@ -181,7 +183,7 @@ public class MainMenu extends Menu{
 
     private void showRestaurants() {
         ArrayList<Restaurant> allRestaurants = this.controller.handleShowRestaurants();
-
+        System.out.println("Restaurants list :");
         for (int i=0; i<allRestaurants.size(); i++)
             System.out.println((i+1)+". "+allRestaurants.get(i).getName());
 
@@ -194,7 +196,29 @@ public class MainMenu extends Menu{
         this.showRestaurantOptions(restaurant);
     }
     private void showRestaurantOptions(Restaurant restaurant) {
-        //continue
+    //show and edit location food type select menu edit food
+        System.out.println("""
+                1. show location\s
+                2. edit location\s
+                3. show FoodTypes\s
+                4. edit FoodType\s
+                5. menu\s
+                6. back
+                """);
+        String choice = this.getChoice();
+        switch (choice.trim()) {
+            case "1" -> this.controller.handleShowLocation();
+            case "2" -> this.controller.editLocation(getInput("enter new location"));
+            case "3" -> this.controller.showFoodTypes();
+            case "4" -> this.controller.editFoodType();
+            case "5" -> this.menu();
+            case "6" -> this.run();
+            default -> System.out.println(Message.INVALID_CHOICE);
+        }
+    }
+
+    private void menu() {
+
     }
 
 
