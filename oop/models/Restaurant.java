@@ -58,6 +58,9 @@ public class Restaurant {
     public void setFoodType(int ID) {
         this.foodType.add(ID);
     }
+    public void editFoodType(int ID, FoodType foodType) {
+        this.foodType.set(ID-1,FoodType.getIntFromFoodType(foodType));
+    }
 
     public ArrayList<Food> getFood() {
         return food;

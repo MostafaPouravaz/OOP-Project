@@ -22,7 +22,7 @@ public class Food {
     private boolean isDiscounted = false;
     public void discounter (int timePeriod){
         this.startTime = LocalDateTime.now();
-        this.period = timePeriod;
+        this.period = timePeriod * 60;
         this.isDiscounted = true;
     }
     public boolean discountActive(){

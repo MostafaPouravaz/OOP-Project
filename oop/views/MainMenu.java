@@ -192,10 +192,10 @@ public class MainMenu extends Menu{
     private void chooseRestaurant() {
         ArrayList<Restaurant> allRestaurants = this.controller.handleShowRestaurants();
         String choice = this.getChoice();
-        Restaurant restaurant = controller.handleChooseRestaurant(choice);
-        this.showRestaurantOptions(restaurant);
+        setCurrentRestaurant(controller.handleChooseRestaurant(choice));
+        this.showRestaurantOptions();
     }
-    private void showRestaurantOptions(Restaurant restaurant) {
+    private void showRestaurantOptions() {
     //show and edit location food type select menu edit food
         System.out.println("""
                 1. show location\s
@@ -210,7 +210,7 @@ public class MainMenu extends Menu{
             case "1" -> this.controller.handleShowLocation();
             case "2" -> this.controller.editLocation(getInput("enter new location"));
             case "3" -> this.controller.showFoodTypes();
-            case "4" -> this.controller.editFoodType();
+            case "4" -> this.editFoodType();
             case "5" -> this.menu();
             case "6" -> this.run();
             default -> System.out.println(Message.INVALID_CHOICE);
@@ -218,9 +218,122 @@ public class MainMenu extends Menu{
     }
 
     private void menu() {
+        //name id price discount
+        System.out.println("Menu : ");
+        for (int i=0; i<getCurrentRestaurant().getFood().size(); i++){
+            System.out.print((i+1)+ ". \nName: " + getCurrentRestaurant().getFood().get(i).getName()+
+                    " | ID: "+getCurrentRestaurant().getFood().get(i).getID()+" | Price: "+ getCurrentRestaurant().getFood().get(i).getPrice());
+            if (getCurrentRestaurant().getFood().get(i).isActive())
+                System.out.print(" | Active : YES");
+            else System.out.print(" | Active: NO");
+            if (getCurrentRestaurant().getFood().get(i).discountActive())
+                System.out.print(" | discountActive : YES" + " | discount percent :" + getCurrentRestaurant().getFood().get(i).getDiscount()+"%");
+            else System.out.print(" | discountActive: NO");
+        }
+        System.out.println((getCurrentRestaurant().getFood().size()+1)+". add food\n" +(getCurrentRestaurant().getFood().size()+2) +". back\nchoose one");
+        int j= getScanner().nextInt()-1;
+        if (j>getCurrentRestaurant().getFood().size()) {
+            System.out.println(Message.INVALID_CHOICE);
+            menu();
+        }else if (j==getCurrentRestaurant().getFood().size())
+            addFood();
+        else if (j==getCurrentRestaurant().getFood().size()+1)
+            showRestaurantOptions();
+        else {
+            setCurrentFood(getCurrentRestaurant().getFood().get(j));
+            foodMenu();
+        }
+    }
+    private void foodMenu(){
+        //edit food name and price add food delete food active and deActive food discount food
+        System.out.println(getCurrentFood().getName() + " options : \n1. edit food name\n2. edit price\n3. delete food\n" +
+                "4. food Activation\n5. discount Activation\n6.back");//kamel nashode
+        String choice = this.getChoice();
+        switch (choice.trim()) {
+            case "1" -> this.editFoodName();
+            case "2" -> this.editPrice();
+            case "3" -> this.deleteFood();
+            case "4" -> this.foodActivation();
+            case "5" -> this.discountActivation();
+            case "6" -> this.menu();
+            default -> System.out.println(Message.INVALID_CHOICE);
+        }
 
     }
 
+    private void discountActivation() {
+        if (getCurrentFood().discountActive())
+            System.out.println("You have an active discount!");
+        else {
+            System.out.println("enter discount percent: ");
+            int discount = getScanner().nextInt();
+            System.out.println("enter timestamp into minutes: ");
+            int timestamp = getScanner().nextInt();
+            if (discount>50)
+                System.out.println(Message.WRONG_CREDENTIALS);
+            else {
+                currentFood.setDiscount(discount);
+                currentFood.discounter(timestamp);
+                System.out.println(Message.SUCCESS);
+            }
+        }
+        foodMenu();
+    }
+
+    private void foodActivation() {
+        if (getCurrentFood().isActive()){
+            System.out.println("Are you sure you want to disActive food?");
+            String choice = getScanner().nextLine().trim();
+            if (choice.equals("yes"))
+                getCurrentFood().setActive(false);
+            else System.out.println("process canceled");
+        }else {
+            System.out.println("Are you sure you want to Active food?");
+            String choice = getScanner().nextLine().trim();
+            if (choice.equals("yes"))
+                getCurrentFood().setActive(true);
+            else System.out.println("process canceled");
+        }
+        foodMenu();
+    }
+
+    private void deleteFood() {
+        getCurrentRestaurant().getFood().remove(getCurrentFood());
+        setCurrentFood(null);
+        System.out.println(Message.SUCCESS);
+        foodMenu();
+    }
+
+    private void editPrice() {
+        System.out.println("enter new price : ");
+        getCurrentFood().setPrice(getScanner().nextInt());
+        System.out.println(Message.SUCCESS);
+        foodMenu();
+    }
+
+    private void editFoodName() {
+        System.out.println("enter new name : ");
+        getCurrentFood().setName(getScanner().nextLine().trim());
+        System.out.println(Message.SUCCESS);
+        foodMenu();
+    }
+
+    private void editFoodType(){
+        this.controller.showFoodTypes();
+        String choice = getInput("choose one to edit");
+        setCurrentFoodType(FoodType.getFoodTypeFromInt(Integer.parseInt(this.getInput("""
+                choose new Food type between these items:\s
+                1. FastFood
+                2. IranianFood
+                3. SeaFood
+                4. Appetizer
+                5. other"""))-1));
+        System.out.println("ARE YOU SURE YOU WANT TO CHANGE YOUR RESTAURANT TYPE?");
+        if (getScanner().next().trim().equals("yes"))
+            getCurrentRestaurant().editFoodType(Integer.parseInt(choice.trim())-1,getCurrentFoodType());
+        else System.out.println("edit food type cancelled");
+
+    }
 
     private void addComment() {
     }

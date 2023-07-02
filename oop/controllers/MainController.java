@@ -75,11 +75,11 @@ public class MainController extends Controller{
     }
 
     public void showFoodTypes() {
+        System.out.println("Food types are :");
         for (int i=0; i<MainMenu.getCurrentRestaurant().getFoodType().size(); i++)
             System.out.println((i+1)+". "+ FoodType.getFoodTypeFromInt(MainMenu.getCurrentRestaurant().getFoodType().get(i)));
     }
 
-    public void editFoodType() {
-
+    public void handleEditFoodType(String choice) {
     }
 }
