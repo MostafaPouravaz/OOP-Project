@@ -3,13 +3,19 @@ package models;
 import enums.FoodType;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 
 public class Restaurant {
     private final static ArrayList<Restaurant> allRestaurant = new ArrayList<>();
+
+    private ArrayList<RatingForRestaurant> ratings = new ArrayList<>();
+
+    private ArrayList<CommentForRestaurant> comments = new ArrayList<>();
     private String name;
     int ID_Counter=0;
     private int ID;
+    private int finalRate;
+
     private int ID_Owner;
     private int locationNode;
     private ArrayList<Integer> foodType = new ArrayList<>(); //
@@ -99,4 +105,45 @@ public class Restaurant {
         Restaurant.allRestaurant.add(this);
     }
 
+    public void ShowComments() {
+        for (int i=0; comments.size()>i; i++){
+            System.out.println(i+1 + ". \n" +
+                    Customer.getUserByUserID(comments.get(i).getCustomerID()).getUsername() + " :"
+                    + comments.get(i).getComment());
+            if (comments.get(i).isResponseExists())
+                System.out.println("manager's response : " + comments.get(i).getResponse());
+        }
+    }
+    public void addComment(int customerID, String comment){
+        comments.add(new CommentForRestaurant(ID, customerID, comment));
+    }
+    public void editComment(int customerID, String comment) {
+        for (CommentForRestaurant comment1 : comments) {
+            if (comment1.getCustomerID() == customerID)
+                comment1.editComment(comment);
+        }
+        CommentForRestaurant.getCommentByRestaurantIDAndCostumerID(ID,customerID).editComment(comment);
+    }
+    public void addOrEditResponse(int commentID, String response) {
+        for (CommentForRestaurant comment1 : comments) {
+            if(comment1.getCommentID()==commentID)
+                comment1.setResponse(commentID , response);
+        }
+    }
+    public int getFinalRate() {
+        finalRate = 0;
+        for (RatingForRestaurant rating : ratings) finalRate += rating.getRate();
+        return finalRate/ratings.size();
+    }
+
+    public void addRate(int customerID, int rate){
+        ratings.add(new RatingForRestaurant(ID, customerID, rate));
+    }
+    public void editRate(int customerID, int rate) {
+        for (RatingForRestaurant rating : ratings) {
+            if (rating.getCustomerID() == customerID)
+                rating.editRate(rate);
+        }
+        RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(ID,customerID).editRate(rate);
+    }
 }

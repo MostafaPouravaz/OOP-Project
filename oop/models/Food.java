@@ -5,8 +5,8 @@ import java.util.ArrayList;
 //edit setter getter
 //comment
 public class Food {
-    private ArrayList<Rating> ratings = new ArrayList<>();
-    private ArrayList<Comment> comments = new ArrayList<>();
+    private ArrayList<RatingForFood> ratings = new ArrayList<>();
+    private ArrayList<CommentForFood> comments = new ArrayList<>();
     private int finalRate;
     private String name;
     private final static ArrayList<Food> allFoods = new ArrayList<>();
@@ -87,38 +87,40 @@ public class Food {
 
     public int getFinalRate() {
         finalRate = 0;
-        for (Rating rating : ratings) finalRate += rating.getRate();
+        for (RatingForFood rating : ratings) finalRate += rating.getRate();
         return finalRate/ratings.size();
     }
     public void ShowComments() {
         for (int i=0; comments.size()>i; i++){
-            System.out.println(i+1 + ". \n" + Customer.getUserByUserID(comments.get(i).getCustomerID()).getUsername() + " :" + comments.get(i).getComment());
+            System.out.println(i+1 + ". \n" +
+                    Customer.getUserByUserID(comments.get(i).getCustomerID()).getUsername() + " :"
+                    + comments.get(i).getComment());
             if (comments.get(i).isResponseExists())
                 System.out.println("manager's response : " + comments.get(i).getResponse());
         }
     }
     public void addRate(int customerID, int rate){
-        ratings.add(new Rating(ID, customerID, rate));
+        ratings.add(new RatingForFood(ID, customerID, rate));
     }
     public void addComment(int customerID, String comment){
-        comments.add(new Comment(ID, customerID, comment));
+        comments.add(new CommentForFood(ID, customerID, comment));
     }
     public void editRate(int customerID, int rate) {
-        for (Rating rating : ratings) {
+        for (RatingForFood rating : ratings) {
             if (rating.getCustomerID() == customerID)
                 rating.editRate(rate);
         }
-        Rating.getRatingByFoodIDAndCostumerID(ID,customerID).editRate(rate);
+        RatingForFood.getRatingByFoodIDAndCostumerID(ID,customerID).editRate(rate);
     }
     public void editComment(int customerID, String comment) {
-        for (Comment comment1 : comments) {
+        for (CommentForFood comment1 : comments) {
             if (comment1.getCustomerID() == customerID)
                 comment1.editComment(comment);
         }
-        Comment.getCommentByFoodIDAndCostumerID(ID,customerID).editComment(comment);
+        CommentForFood.getCommentByFoodIDAndCostumerID(ID,customerID).editComment(comment);
     }
     public void addOrEditResponse(int commentID, String response) {
-        for (Comment comment1 : comments) {
+        for (CommentForFood comment1 : comments) {
             if(comment1.getCommentID()==commentID)
                 comment1.setResponse(commentID , response);
         }
