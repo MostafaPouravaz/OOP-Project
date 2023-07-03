@@ -99,13 +99,13 @@ public class Food {
                 System.out.println("manager's response : " + comments.get(i).getResponse());
         }
     }
-    public void addRate(int customerID, int rate){
+    public void addRate(int customerID, double rate){
         ratings.add(new RatingForFood(ID, customerID, rate));
     }
     public void addComment(int customerID, String comment){
         comments.add(new CommentForFood(ID, customerID, comment));
     }
-    public void editRate(int customerID, int rate) {
+    public void editRate(int customerID, double rate) {
         for (RatingForFood rating : ratings) {
             if (rating.getCustomerID() == customerID)
                 rating.editRate(rate);

@@ -362,7 +362,7 @@ public class MainMenu extends Menu{
         System.out.println("9. back");
     }
     private void handleCustomerChoiceFoods(String choice) {
-        switch (choice) {
+        switch (choice.trim()) {
             case "1" -> this.showAllFoodForCustomer();
             case "2" -> this.searchFoodForCustomer();
             case "3" -> this.handleDisplayRestaurantComment();
@@ -439,25 +439,74 @@ public class MainMenu extends Menu{
     }
 
     private void handleDisplayRestaurantComment(){
+        System.out.println("0. back");
+
+        currentRestaurant.ShowComments();
+        String choice = this.getChoice();
+        if(choice.trim().equals("0"))
+            this.handleShowRestaurantOptionForCustomer();
 
     }
 
     private void handleAddNewCommentForRestaurant(){
+        System.out.println("please type your comment");
+        String choice = this.getChoice();
+        User loggedInUser = Menu.getLoggedInUser();
 
+        currentRestaurant.addComment(loggedInUser.getUserId() , choice);
+        System.out.println(Message.SUCCESS);
+        this.handleShowRestaurantOptionForCustomer();
     }
 
     private void handleEditRestaurantCommentForCustomer(){
+        System.out.println("please type your comment");
+        String choice = this.getChoice();
+        User loggedInUser = Menu.getLoggedInUser();
 
+        currentRestaurant.editComment(loggedInUser.getUserId() , choice);
+        System.out.println(Message.SUCCESS);
+        this.handleShowRestaurantOptionForCustomer();
     }
 
     private void handleDisplayRatingForCustomer(){
+        System.out.println("0. back");
 
+        currentRestaurant.getFinalRate();
+        String choice = this.getChoice();
+        if(choice.trim().equals("0"))
+            this.handleShowRestaurantOptionForCustomer();
     }
     private void handleSubmitRatingForCustomer(){
+        System.out.println("please type your from 0 to 5");
+        String choice = this.getChoice();
+        double rate = Integer.parseInt(choice.trim());
+        if(rate>=0 && rate<=5) {
+            User loggedInUser = Menu.getLoggedInUser();
+
+            currentRestaurant.addRate(loggedInUser.getUserId() ,rate);
+            System.out.println(Message.SUCCESS);
+            this.handleShowRestaurantOptionForCustomer();
+        }else{
+            System.out.println("please rate correctly");
+            this.handleSubmitRatingForCustomer();
+        }
 
     }
 
     private void handleEditRestaurantRatingForCustomer(){
+        System.out.println("please type your from 0 to 5");
+        String choice = this.getChoice();
+        double rate = Integer.parseInt(choice.trim());
+        if(rate>=0 && rate<=5) {
+            User loggedInUser = Menu.getLoggedInUser();
+
+            currentRestaurant.editRate(loggedInUser.getUserId() ,rate);
+            System.out.println(Message.SUCCESS);
+            this.handleShowRestaurantOptionForCustomer();
+        }else{
+            System.out.println("please rate correctly");
+            this.handleEditRestaurantRatingForCustomer();
+        }
 
     }
 

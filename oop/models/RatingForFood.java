@@ -6,7 +6,7 @@ public class RatingForFood {
     private final static ArrayList<RatingForFood> allRatings = new ArrayList<>();
     private int foodID;
     private int customerID;
-    private int rate;
+    private double rate;
     private static int counterID=0;
     private int rateID;
 
@@ -18,16 +18,16 @@ public class RatingForFood {
         return customerID;
     }
 
-    public int getRate() {
+    public double getRate() {
         return rate;
     }
 
-    public void editRate(int rate) {
+    public void editRate(double rate) {
         this.rate = rate;
 
     }
 
-    public RatingForFood(int foodID, int customerID, int rate) {
+    public RatingForFood(int foodID, int customerID, double rate) {
         this.foodID = foodID;
         this.customerID = customerID;
         this.rate = rate;

@@ -136,10 +136,10 @@ public class Restaurant {
         return finalRate/ratings.size();
     }
 
-    public void addRate(int customerID, int rate){
+    public void addRate(int customerID, double rate){
         ratings.add(new RatingForRestaurant(ID, customerID, rate));
     }
-    public void editRate(int customerID, int rate) {
+    public void editRate(int customerID, double rate) {
         for (RatingForRestaurant rating : ratings) {
             if (rating.getCustomerID() == customerID)
                 rating.editRate(rate);
