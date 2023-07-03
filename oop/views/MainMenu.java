@@ -61,7 +61,26 @@ public class MainMenu extends Menu{
     private void showCustomerOptions() {
         System.out.println("1. Show restaurants");
         System.out.println("2. Search restaurants");
-        System.out.println("3. back");
+        System.out.println("3. access order history");
+        System.out.println("4. display cart status");
+        System.out.println("5. confirm order");
+        System.out.println("6. charge account");
+        System.out.println("7. display account charge");
+        System.out.println("8. back");
+    }
+
+    private void handleCustomerChoice(String choice) {
+        switch (choice) {
+            case "1" -> this.showRestaurantsForCustomer();
+            case "2" -> this.searchRestaurant();
+            case "3" -> this.handleAccessOrderHistoryForCustomer();
+            case "4" -> this.handleDisplayCartStatusForCustomer();
+            case "5" -> this.handleConfirmOrderForCustomer();
+            case "6" -> this.handleChargeAccountForCustomer();
+            case "7" -> this.handleDisplayAccountChargeForCustomer();
+            case "8" -> RegisterMenu.getInstance().run();
+            default -> System.out.println(Message.INVALID_CHOICE);
+        }
     }
 
     @Override
@@ -93,23 +112,6 @@ public class MainMenu extends Menu{
             case "2" -> this.addFood();
             case "3" -> this.addRestaurant();
             default -> System.out.println(Message.INVALID_CHOICE);
-        }
-    }
-
-    private void handleCustomerChoice(String choice) {
-        switch (choice) {
-            case "1":
-                this.showRestaurantsForCustomer();
-                break;
-            case "2":
-                this.searchRestaurant();
-                break;
-            case "3":
-                RegisterMenu.getInstance().run();
-                break;
-
-            default:
-                System.out.println(Message.INVALID_CHOICE);
         }
     }
 
@@ -180,7 +182,6 @@ public class MainMenu extends Menu{
         this.chooseRestaurant();
     }
     private void chooseRestaurant() {
-        ArrayList<Restaurant> allRestaurants = this.controller.handleShowRestaurants();
         String choice = this.getChoice();
         setCurrentRestaurant(controller.handleChooseRestaurant(choice));
         this.showRestaurantOptions();
@@ -328,35 +329,157 @@ public class MainMenu extends Menu{
     private void showRestaurantsForCustomer() {
         ArrayList<Restaurant> allRestaurants = this.controller.handleShowRestaurants();
         System.out.println("Restaurants list :");
-        for (int i=0; i<allRestaurants.size(); i++)
-            System.out.println(allRestaurants.get(i).getID()+". "+allRestaurants.get(i).getName());
+        for (Restaurant allRestaurant : allRestaurants)
+            System.out.println(allRestaurant.getID() + ". " + allRestaurant.getName());
 
-        this.chooseRestaurantForCostumer();
+        this.chooseRestaurantForCustomer();
     }
-    private void chooseRestaurantForCostumer() {
-        ArrayList<Restaurant> allRestaurants = this.controller.handleShowRestaurants();
+    private void chooseRestaurantForCustomer() {
         String choice = this.getChoice();
         setCurrentRestaurant(controller.handleChooseRestaurant(choice));
-        this.showRestaurantOptionsForCostumer();
+        this.handleShowRestaurantOptionForCustomer();
     }
-    private void showRestaurantOptionsForCostumer() {
+
+    private void handleShowRestaurantOptionForCustomer(){
+        this.showRestaurantOptionsForcustomer();
+
+        String choice = this.getChoice();
+
+        this.handleCustomerChoiceFoods(choice);
+
+    }
+    private void showRestaurantOptionsForcustomer(){
+        System.out.println("enter one of the choices");
+
+        System.out.println("1. Show all foods");
+        System.out.println("2. Search foods");
+        System.out.println("3. display restaurant comments");
+        System.out.println("4. add new comment for restaurant");
+        System.out.println("5. edit restaurant comment");
+        System.out.println("6. display restaurant rating");
+        System.out.println("7. submit restaurant rating");
+        System.out.println("8. edit restaurant rating");
+        System.out.println("9. back");
+    }
+    private void handleCustomerChoiceFoods(String choice) {
+        switch (choice) {
+            case "1" -> this.showAllFoodForCustomer();
+            case "2" -> this.searchFoodForCustomer();
+            case "3" -> this.handleDisplayRestaurantComment();
+            case "4" -> this.handleAddNewCommentForRestaurant();
+            case "5" -> this.handleEditRestaurantCommentForCustomer();
+            case "6" -> this.handleDisplayRatingForCustomer();
+            case "7" -> this.handleSubmitRatingForCustomer();
+            case "8" -> this.handleEditRestaurantRatingForCustomer();
+            case "9" -> this.showRestaurantsForCustomer();
+            default -> System.out.println(Message.INVALID_CHOICE);
+        }
+    }
+    private void showAllFoodForCustomer(){
         ArrayList<Food> allFoods = this.controller.handleShowFoods();
         System.out.println("Foods list :");
-        for (int i=0; i<allFoods.size(); i++)
-            System.out.println(allFoods.get(i).getID()
-                    +". "+allFoods.get(i).getName()+"       "+allFoods.get(i).getPrice()+"$");
-
-        this.chooseFoodForCostumer();
+        for (Food allFood : allFoods)
+            System.out.println(allFood.getID()
+                    + ". " + allFood.getName() + "       " + allFood.getPrice() + "$");
+        this.chooseFoodForCustomer();
     }
-    private void chooseFoodForCostumer(){
+
+    private void chooseFoodForCustomer(){
+        String choice = this.getChoice();
+
+        setCurrentFood(controller.handleChooseFood(choice));
+        this.handleShowFoodOptionForCustomer();
+    }
+
+    private void handleShowFoodOptionForCustomer(){
         //continue
     }
 
+    private void searchFoodForCustomer(){
+        String choice = this.getChoice();
+        ArrayList<Food> allSearchedFoods = this.controller.handleSearchFoods(choice);
+        System.out.println("0. search food");
+        for (Food allSearchedFood : allSearchedFoods)
+            System.out.println(allSearchedFood.getID() + ". " + allSearchedFood.getName());
+
+        this.chooseSearchedFoodForCustomer();
+    }
+
+    private void chooseSearchedFoodForCustomer(){
+        String choice = this.getChoice();
+        if(choice.equals("0"))
+            this.searchFoodForCustomer();
+
+        else {
+            setCurrentFood(controller.handleChooseFood(choice));
+            this.handleShowFoodOptionForCustomer();
+        }
+    }
+
+
+
     private void searchRestaurant() {
         String choice = this.getChoice();
+        ArrayList<Restaurant> allSearchedRestaurants = this.controller.handleSearchRestaurants(choice);
+        System.out.println("0. search restaurant");
+        for (Restaurant allSearchedRestaurant : allSearchedRestaurants)
+            System.out.println(allSearchedRestaurant.getID() + ". " + allSearchedRestaurant.getName());
+
+        this.chooseSearchedRestaurantForCustomer();
+    }
+    private void chooseSearchedRestaurantForCustomer(){
+        String choice = this.getChoice();
+        if(choice.equals("0"))
+            this.searchRestaurant();
+
+        else {
+            setCurrentRestaurant(controller.handleChooseRestaurant(choice));
+            this.handleShowRestaurantOptionForCustomer();
+        }
+    }
+
+    private void handleDisplayRestaurantComment(){
 
     }
 
+    private void handleAddNewCommentForRestaurant(){
+
+    }
+
+    private void handleEditRestaurantCommentForCustomer(){
+
+    }
+
+    private void handleDisplayRatingForCustomer(){
+
+    }
+    private void handleSubmitRatingForCustomer(){
+
+    }
+
+    private void handleEditRestaurantRatingForCustomer(){
+
+    }
+
+    private void handleAccessOrderHistoryForCustomer(){
+
+    }
+
+    private void handleDisplayCartStatusForCustomer(){
+
+    }
+
+    private void handleConfirmOrderForCustomer(){
+
+    }
+
+    private void handleChargeAccountForCustomer(){
+
+    }
+
+    private void handleDisplayAccountChargeForCustomer(){
+
+    }
     @Override
     protected void showOptions() {
         System.out.println("enter one of the choices");
@@ -369,5 +492,4 @@ public class MainMenu extends Menu{
             this.showCustomerOptions();
         }
     }
-
 }

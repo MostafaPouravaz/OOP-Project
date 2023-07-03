@@ -35,10 +35,35 @@ public class MainController extends Controller{
     public ArrayList<Food> handleShowFoods() {
         return MainMenu.getCurrentRestaurant().getFood();
     }
+    public ArrayList<Restaurant> handleSearchRestaurants(String choice) {
+        ArrayList <Restaurant> searchedRestaurants = new ArrayList<>();
+        for(int i=0 ; i<Restaurant.getAllRestaurant().size() ; i++)
+            if(Restaurant.getAllRestaurant().get(i).getName().contains(choice))
+                searchedRestaurants.add(Restaurant.getAllRestaurant().get(i));
+        return searchedRestaurants;
+    }
+
+    public ArrayList<Food> handleSearchFoods(String choice) {
+        ArrayList <Food> searchedFoods = new ArrayList<>();
+        for(int i=0 ; i<MainMenu.getCurrentRestaurant().getFood().size() ; i++)
+            if(MainMenu.getCurrentRestaurant().getFood().get(i).getName().contains(choice))
+                searchedFoods.add(MainMenu.getCurrentRestaurant().getFood().get(i));
+        return searchedFoods;
+    }
+
+
     public Restaurant handleChooseRestaurant(String choice) {
         int i = Integer.parseInt(choice.trim())-1;
         if (i<Restaurant.getAllRestaurant().size())
             return Restaurant.getAllRestaurant().get(i);
+        else
+            return null;
+    }
+
+    public Food handleChooseFood(String choice) {
+        int i = Integer.parseInt(choice.trim())-1;
+        if (i<MainMenu.getCurrentRestaurant().getFood().size())
+            return MainMenu.getCurrentRestaurant().getFood().get(i);
         else
             return null;
     }
