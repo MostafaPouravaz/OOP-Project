@@ -1,5 +1,7 @@
 package models;
 
+import java.util.ArrayList;
+
 public class Customer extends User {
     private int charge = 0;
     public Customer(String username, String password) {
@@ -33,6 +35,9 @@ public class Customer extends User {
         Customer customer = (Customer) obj;
 
         return this.getUserId() == customer.getUserId();
+    }
+    public static ArrayList<Food> getAllCartFood() {
+        return Cart.;
     }
 
 }

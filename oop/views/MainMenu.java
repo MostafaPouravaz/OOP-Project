@@ -6,7 +6,6 @@ import enums.Message;
 import models.*;
 import models.Order;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class MainMenu extends Menu{
@@ -330,6 +329,7 @@ public class MainMenu extends Menu{
 
     private void showRestaurantsForCustomer() {
         ArrayList<Restaurant> allRestaurants = this.controller.handleShowRestaurants();
+        System.out.println("0. back");
         System.out.println("Restaurants list :");
         for (Restaurant allRestaurant : allRestaurants)
             System.out.println(allRestaurant.getID() + ". " + allRestaurant.getName());
@@ -338,8 +338,12 @@ public class MainMenu extends Menu{
     }
     private void chooseRestaurantForCustomer() {
         String choice = this.getChoice();
-        setCurrentRestaurant(controller.handleChooseRestaurant(choice));
-        this.handleShowRestaurantOptionForCustomer();
+        if(choice.trim().equals("0"))
+            this.run();
+        else {
+            setCurrentRestaurant(controller.handleChooseRestaurant(choice));
+            this.handleShowRestaurantOptionForCustomer();
+        }
     }
 
     private void handleShowRestaurantOptionForCustomer(){
@@ -549,11 +553,28 @@ public class MainMenu extends Menu{
     }
 
     private void handleDisplayCartStatusForCustomer(){
-        //continue
+        System.out.println("0. back \nthe chosen foods are : ");
 
+        for (int i=0 ; i<Cart.getAllPersonCart().get(Cart.getAllPersonCart().size()-1).getChosenFoods().size() ; i++)
+            System.out.println(Cart.getAllPersonCart().get(Cart.getAllPersonCart().size()-1).getChosenFoods().get(i).getName());
+
+        String choice = this.getChoice();
+        if(choice.trim().equals("0"))
+            this.run();
     }
 
     private void handleConfirmOrderForCustomer(){
+        new Order(Cart.getAllPersonCart().get(Cart.getAllPersonCart().size()-1));
+        System.out.println(Message.SUCCESS+"\n0. back\n1. show estimated delivery time" );
+        String choice = this.getChoice();
+        switch (choice.trim()) {
+            case "0" -> this.run();
+            case "1" -> this.handleShowEstimatedDeliveryTime();
+            default -> System.out.println(Message.INVALID_CHOICE);
+        }
+
+    }
+    private void handleShowEstimatedDeliveryTime(){
         //continue
     }
 
