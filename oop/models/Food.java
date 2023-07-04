@@ -19,6 +19,35 @@ public class Food {
     int foodTypeID;
     private int discount;
     private boolean active = false;
+
+    public ArrayList<RatingForFood> getRatings() {
+        return ratings;
+    }
+
+    public ArrayList<CommentForFood> getComments() {
+        return comments;
+    }
+
+    public static int getIDCounter() {
+        return IDCounter;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+
+    public boolean isDiscounted() {
+        return isDiscounted;
+    }
+
+    public static ArrayList<Food> getAllFoods() {
+        return Food.allFoods;
+    }
+
     private boolean isDiscounted = false;
     public void discounter (int timePeriod){
         this.startTime = LocalDateTime.now();

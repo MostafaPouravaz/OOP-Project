@@ -1,7 +1,7 @@
 package models;
 
 public class Customer extends User {
-    private int charge;
+    private int charge = 0;
     public Customer(String username, String password) {
         super(username, password);
         this.charge = 0;
@@ -12,7 +12,7 @@ public class Customer extends User {
     }
 
     public void setCharge(int charge) {
-        this.charge = charge;
+        this.charge += charge;
     }
 
     @Override

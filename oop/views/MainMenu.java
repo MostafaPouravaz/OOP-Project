@@ -4,7 +4,9 @@ import controllers.MainController;
 import enums.FoodType;
 import enums.Message;
 import models.*;
+import models.Order;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class MainMenu extends Menu{
@@ -494,7 +496,7 @@ public class MainMenu extends Menu{
     }
 
     private void handleEditRestaurantRatingForCustomer(){
-        System.out.println("please type your from 0 to 5");
+        System.out.println("please rate from 0 to 5");
         String choice = this.getChoice();
         double rate = Integer.parseInt(choice.trim());
         if(rate>=0 && rate<=5) {
@@ -511,23 +513,76 @@ public class MainMenu extends Menu{
     }
 
     private void handleAccessOrderHistoryForCustomer(){
+        User loggedInUser = Menu.getLoggedInUser();
 
+        System.out.println("ID of your orders: (select one)");
+        System.out.println("0. back");
+
+        for(int i=0 ; i<Order.getAllOrders().size() ; i++)
+            if(Order.getAllOrders().get(i).getCustomerID()==loggedInUser.getUserId()){
+                System.out.println(Order.getAllOrders().get(i).getOrderID());
+            }
+        String choice = this.getChoice();
+
+        int ID = Integer.parseInt(choice.trim());
+        if(ID==0)
+            this.run();
+        else {
+            System.out.println("0. back");
+
+
+            for (int i = 0; i < Order.getAllOrders().size(); i++)
+                if (Order.getAllOrders().get(i).getOrderID() == ID) {
+                    System.out.println("the order " + ID + " :");
+                    System.out.println("Restaurant name : " + Order.getAllOrders().get(i).getRestaurantName());
+                    System.out.println("The ordered food :");
+
+                    for (int j = 0; j < Order.getAllOrders().get(i).getOrderedFoods().size(); j++)
+                        System.out.println(Order.getAllOrders().get(i).getOrderedFoods().get(j).getName());
+
+                    System.out.println("Final price : " + Order.getAllOrders().get(i).getFinalPrice() + " $");
+                }
+            choice = this.getChoice();
+            if (choice.trim().equals("0"))
+                this.handleAccessOrderHistoryForCustomer();
+        }
     }
 
     private void handleDisplayCartStatusForCustomer(){
+        //continue
 
     }
 
     private void handleConfirmOrderForCustomer(){
-
+        //continue
     }
 
     private void handleChargeAccountForCustomer(){
+        System.out.println("How much do you want to charge your account ?");
 
+        String choice = this.getChoice();
+
+        int charge = Integer.parseInt(choice);
+        User loggedInUser = Menu.getLoggedInUser();
+
+        Customer user = (Customer) User.getUserByUserID(loggedInUser.getUserId());
+        user.setCharge(charge);
+
+        System.out.println(Message.SUCCESS);
+        this.run();
     }
 
     private void handleDisplayAccountChargeForCustomer(){
+        User loggedInUser = Menu.getLoggedInUser();
 
+        Customer user = (Customer) User.getUserByUserID(loggedInUser.getUserId());
+        int charge = user.getCharge();
+        System.out.println("0. back");
+        System.out.println("The charge of account : "+charge + " $" );
+
+        String choice = this.getChoice();
+        if(choice.trim().equals("0"))
+            this.run();
     }
     @Override
     protected void showOptions() {
