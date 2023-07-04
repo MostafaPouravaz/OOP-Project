@@ -143,10 +143,12 @@ public class Food {
     }
     public void editComment(int customerID, String comment) {
         for (CommentForFood comment1 : comments) {
-            if (comment1.getCustomerID() == customerID)
+            if (comment1.getCustomerID() == customerID) {
                 comment1.editComment(comment);
+                CommentForFood.getCommentByFoodIDAndCostumerID(ID, customerID).editComment(comment);
+                break;
+            }
         }
-        CommentForFood.getCommentByFoodIDAndCostumerID(ID,customerID).editComment(comment);
     }
     public void addOrEditResponse(int commentID, String response) {
         for (CommentForFood comment1 : comments) {

@@ -36,8 +36,6 @@ public class Customer extends User {
 
         return this.getUserId() == customer.getUserId();
     }
-    public static ArrayList<Food> getAllCartFood() {
-        return Cart.;
-    }
+
 
 }

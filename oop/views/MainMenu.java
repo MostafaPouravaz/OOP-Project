@@ -13,6 +13,8 @@ public class MainMenu extends Menu{
 
     private final MainController controller;
     private static Restaurant currentRestaurant = null;
+    private static Cart currentCart = null;
+
     public static Restaurant getCurrentRestaurant() {
         return MainMenu.currentRestaurant;
     }
@@ -20,6 +22,12 @@ public class MainMenu extends Menu{
     public static void setCurrentRestaurant(Restaurant restaurant) {
         MainMenu.currentRestaurant = restaurant;
     }
+    public static void setCurrentCart(int customerID , int restaurantID) {
+        MainMenu.currentCart = new Cart(customerID , restaurantID);
+    }
+
+
+
     private static FoodType currentFoodType = null;
     public static FoodType getCurrentFoodType() {
         return MainMenu.currentFoodType;
@@ -342,6 +350,9 @@ public class MainMenu extends Menu{
             this.run();
         else {
             setCurrentRestaurant(controller.handleChooseRestaurant(choice));
+            User loggedInUser = Menu.getLoggedInUser();
+
+            setCurrentCart(loggedInUser.getUserId() , currentRestaurant.getID());
             this.handleShowRestaurantOptionForCustomer();
         }
     }
@@ -351,7 +362,7 @@ public class MainMenu extends Menu{
 
         String choice = this.getChoice();
 
-        this.handleCustomerChoiceFoods(choice);
+        this.handleCustomerChoiceRestaurantOption(choice);
 
     }
     private void showRestaurantOptionsForcustomer(){
@@ -367,7 +378,7 @@ public class MainMenu extends Menu{
         System.out.println("8. edit restaurant rating");
         System.out.println("9. back");
     }
-    private void handleCustomerChoiceFoods(String choice) {
+    private void handleCustomerChoiceRestaurantOption(String choice) {
         switch (choice.trim()) {
             case "1" -> this.showAllFoodForCustomer();
             case "2" -> this.searchFoodForCustomer();
@@ -398,9 +409,112 @@ public class MainMenu extends Menu{
     }
 
     private void handleShowFoodOptionForCustomer(){
-        //continue
+        this.showFoodOptionsForcustomer();
+
+        String choice = this.getChoice();
+
+        this.handleCustomerChoiceFoodOption(choice);
+
+    }
+    private void showFoodOptionsForcustomer(){
+        System.out.println("enter one of the choices");
+
+        System.out.println("1. display comments of food");
+        System.out.println("2. add new comment for food");
+        System.out.println("3. edit your comment");
+        System.out.println("4. display rating of food");
+        System.out.println("5. submit rating");
+        System.out.println("6. edit your rating");
+        System.out.println("7. add this food to cart");
+        System.out.println("8. back");
     }
 
+    private void handleCustomerChoiceFoodOption(String choice) {
+        switch (choice.trim()) {
+            case "1" -> this.handleDisplayCommentsOfFoodForCustomer();
+            case "2" -> this.handleAddNewCommentForFoodForCustomer();
+            case "3" -> this.handleEditCommentsOfFoodForCustomer();
+            case "4" -> this.handleDisplayRatingOfFoodForCustomer();
+            case "5" -> this.handleSubmitRatingForFoodForCustomer();
+            case "6" -> this.handleEditRatingForFoodForCustomer();
+            case "7" -> this.handleAddFoodToCart();
+            case "8" -> this.showAllFoodForCustomer();
+            default -> System.out.println(Message.INVALID_CHOICE);
+        }
+    }
+    private void handleDisplayCommentsOfFoodForCustomer(){
+        System.out.println("0. back");
+
+        currentFood.ShowComments();
+        String choice = this.getChoice();
+        if(choice.trim().equals("0"))
+            this.handleShowFoodOptionForCustomer();
+
+    }
+    private void handleAddNewCommentForFoodForCustomer(){
+        System.out.println("please type your comment");
+        String choice = this.getChoice();
+        User loggedInUser = Menu.getLoggedInUser();
+
+        currentFood.addComment(loggedInUser.getUserId() , choice);
+        System.out.println(Message.SUCCESS);
+        this.handleShowFoodOptionForCustomer();
+
+    }
+    private void handleEditCommentsOfFoodForCustomer(){
+        System.out.println("please type your comment");
+        String choice = this.getChoice();
+        User loggedInUser = Menu.getLoggedInUser();
+
+        currentFood.editComment(loggedInUser.getUserId() , choice);
+        System.out.println(Message.SUCCESS);
+        this.handleShowFoodOptionForCustomer();
+    }
+    private void handleDisplayRatingOfFoodForCustomer(){
+        System.out.println("0. back");
+
+        currentFood.getFinalRate();
+        String choice = this.getChoice();
+        if(choice.trim().equals("0"))
+            this.handleShowFoodOptionForCustomer();
+    }
+    private void handleSubmitRatingForFoodForCustomer(){
+        System.out.println("please type your from 0 to 5");
+        String choice = this.getChoice();
+        double rate = Integer.parseInt(choice.trim());
+        if(rate>=0 && rate<=5) {
+            User loggedInUser = Menu.getLoggedInUser();
+
+            currentFood.addRate(loggedInUser.getUserId() ,rate);
+            System.out.println(Message.SUCCESS);
+            this.handleShowFoodOptionForCustomer();
+        }else{
+            System.out.println("please rate correctly");
+            this.handleSubmitRatingForFoodForCustomer();
+        }
+
+    }
+    private void handleEditRatingForFoodForCustomer(){
+        System.out.println("please rate from 0 to 5");
+        String choice = this.getChoice();
+        double rate = Integer.parseInt(choice.trim());
+        if(rate>=0 && rate<=5) {
+            User loggedInUser = Menu.getLoggedInUser();
+
+            currentFood.editRate(loggedInUser.getUserId() ,rate);
+            System.out.println(Message.SUCCESS);
+            this.handleShowFoodOptionForCustomer();
+        }else{
+            System.out.println("please rate correctly");
+            this.handleEditRatingForFoodForCustomer();
+        }
+
+    }
+    private void handleAddFoodToCart(){
+        currentCart.addFood(currentFood);
+        System.out.println(Message.SUCCESS);
+        this.handleShowFoodOptionForCustomer();
+    }
     private void searchFoodForCustomer(){
         String choice = this.getChoice();
         ArrayList<Food> allSearchedFoods = this.controller.handleSearchFoods(choice);
@@ -425,6 +539,7 @@ public class MainMenu extends Menu{
 
 
     private void searchRestaurant() {
+
         String choice = this.getChoice();
         ArrayList<Restaurant> allSearchedRestaurants = this.controller.handleSearchRestaurants(choice);
         System.out.println("0. search restaurant");
@@ -554,17 +669,19 @@ public class MainMenu extends Menu{
 
     private void handleDisplayCartStatusForCustomer(){
         System.out.println("0. back \nthe chosen foods are : ");
-
-        for (int i=0 ; i<Cart.getAllPersonCart().get(Cart.getAllPersonCart().size()-1).getChosenFoods().size() ; i++)
-            System.out.println(Cart.getAllPersonCart().get(Cart.getAllPersonCart().size()-1).getChosenFoods().get(i).getName());
-
+        if(currentCart==null)
+            System.out.println("oops,there is no any food!!");
+        else {
+            for (int i = 0; i < currentCart.getChosenFoods().size(); i++)
+                System.out.println(currentCart.getChosenFoods().get(i).getName());
+        }
         String choice = this.getChoice();
         if(choice.trim().equals("0"))
             this.run();
     }
 
     private void handleConfirmOrderForCustomer(){
-        new Order(Cart.getAllPersonCart().get(Cart.getAllPersonCart().size()-1));
+        new Order(currentCart);
         System.out.println(Message.SUCCESS+"\n0. back\n1. show estimated delivery time" );
         String choice = this.getChoice();
         switch (choice.trim()) {
@@ -574,7 +691,7 @@ public class MainMenu extends Menu{
         }
 
     }
-    private void handleShowEstimatedDeliveryTime(){
+    private void handleShowEstimatedDeliveryTime(){ // after set location and delivery
         //continue
     }
 
