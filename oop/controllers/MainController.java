@@ -94,20 +94,6 @@ public class MainController extends Controller{
         return Message.SUCCESS;
     }
 
-    public void handleShowLocation() {
-        System.out.println("location of restaurant : "+MainMenu.getCurrentRestaurant().getLocationNode());
-    }
-
-    public void editLocation(String location) {
-        MainMenu.getCurrentRestaurant().setLocationNode(Integer.parseInt(location));
-    }
-
-    public void showFoodTypes() {
-        System.out.println("Food types are :");
-        for (int i=0; i<MainMenu.getCurrentRestaurant().getFoodType().size(); i++)
-            System.out.println((i+1)+". "+ FoodType.getFoodTypeFromInt(MainMenu.getCurrentRestaurant().getFoodType().get(i)));
-    }
-
     public void handleEditFoodType(String choice) {
     }
 }

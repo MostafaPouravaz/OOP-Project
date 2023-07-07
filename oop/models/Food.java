@@ -119,7 +119,7 @@ public class Food {
         for (RatingForFood rating : ratings) finalRate += rating.getRate();
         return finalRate/ratings.size();
     }
-    public void ShowComments() {
+    public void showComments() {
         for (int i=0; comments.size()>i; i++){
             System.out.println(i+1 + ". \n" +
                     Customer.getUserByUserID(comments.get(i).getCustomerID()).getUsername() + " :"
