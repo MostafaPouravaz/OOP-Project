@@ -2,6 +2,7 @@ package views;
 
 import controllers.RegisterController;
 import enums.Message;
+import models.User;
 
 public class RegisterMenu extends Menu{
     private static RegisterMenu instance = null;
@@ -68,17 +69,22 @@ public class RegisterMenu extends Menu{
             this.registerCustomer();
         } else {
             System.out.println(Message.INVALID_CHOICE);
+            this.run();
         }
-        this.run();
     }
 
     private void registerCustomer() {
         String username = this.getInput("enter username");
         String password = this.getInput("enter password");
         String repeatedPassword = this.getInput("repeat password");
-
         Message message = this.controller.handleCreateCustomer(username, password, repeatedPassword);
-        System.out.println(message == Message.SUCCESS ? "customer registered successfully" : message);
+        if (message==Message.SUCCESS){
+            System.out.println("customer registered successfully");
+            User user = User.getUserByUsername(username);
+            Menu.setLoggedInUser(user);
+            MainMenu.getInstance().run();
+        }else System.out.println(message);
+        this.run();
     }
 
     private void registerVendor() {
@@ -86,7 +92,13 @@ public class RegisterMenu extends Menu{
         String password = this.getInput("enter password");
         String repeatedPassword = this.getInput("repeat password");
         Message message = this.controller.handleCreateVendor(username, password, repeatedPassword);
-        System.out.println(message == Message.SUCCESS ? "vendor registered successfully" : message);
+        if (message==Message.SUCCESS){
+            System.out.println("vendor registered successfully");
+            User user = User.getUserByUsername(username);
+            Menu.setLoggedInUser(user);
+            MainMenu.getInstance().run();
+        }else System.out.println(message);
+        this.run();
     }
 
     @Override

@@ -113,7 +113,6 @@ public class MainMenu extends Menu{
         System.out.println("3. back");
         String choice = this.getChoice();
         handleFoodAndFoodTypeChoice(choice);
-        foodAndFoodTypeOptions();
     }
     public void handleFoodAndFoodTypeChoice(String choice) {
         switch (choice) {
@@ -122,6 +121,7 @@ public class MainMenu extends Menu{
             case "3" -> this.addRestaurant();
             default -> System.out.println(Message.INVALID_CHOICE);
         }
+        foodAndFoodTypeOptions();
     }
 
     private void handleVendorChoice(String choice) {
@@ -131,24 +131,6 @@ public class MainMenu extends Menu{
             case "3" -> RegisterMenu.getInstance().run();
             default -> System.out.println(Message.INVALID_CHOICE);
         }
-    }
-
-    private void goToProfile() {
-    }
-
-    private void editProduct() {
-    }
-
-    private void addProduct() {
-        System.out.println("enter information");
-        String name = this.getInput("enter name");
-        int price = Integer.parseInt(this.getInput("enter price"));
-        int capacity = Integer.parseInt(this.getInput("enter capacity"));
-        String description = this.getInput("enter description");
-
-        Message message = this.controller.handleAddProduct(name, price, capacity, description);
-        System.out.println(message == Message.SUCCESS ? "product added successfully" : message);
-        this.run();
     }
     private void addRestaurant() {
         System.out.println("enter information");
@@ -234,20 +216,20 @@ public class MainMenu extends Menu{
         System.out.println("""
                 1. show location\s
                 2. edit location\s
-                3. show FoodTypes\s
+                3. show and add FoodTypes\s
                 4. edit FoodType\s
                 5. display ratings\s
                 6. display comments\s
                 7. show order history\s
                 8. open orders\s
-                8. menu\s
-                9. back
+                9. menu\s
+                10. back
                 """);
         String choice = this.getChoice();
         switch (choice) {
             case "1" -> this.showLocation();
             case "2" -> this.editLocation();
-            case "3" -> this.showFoodTypes();
+            case "3" -> this.showAndAddFoodTypes();
             case "4" -> this.editFoodType();
             case "5" -> this.displayRestaurantRatings();
             case "6" -> this.displayRestaurantComments();
@@ -260,7 +242,7 @@ public class MainMenu extends Menu{
     }
 
     private void openOrders() {
-
+    //edit status and deliver time
     }
 
     private void showOrderHistory() {
@@ -316,14 +298,20 @@ public class MainMenu extends Menu{
             }
         }
     }
-    private void showFoodTypes() {
+    private void showAndAddFoodTypes() {
         System.out.println("Food types are :");
         for (int i=0; i<getCurrentRestaurant().getFoodType().size(); i++)
             System.out.println((i+1)+". "+ FoodType.getFoodTypeFromInt(getCurrentRestaurant().getFoodType().get(i)));
-        System.out.println("press a button to back");
+        System.out.println("do you want to add foodType?");
         String choice = this.getChoice();
-        if (choice!=null)
+        if (choice.equals("yes"))
+            this.addFoodType();
+        else if (choice.equals("no"))
             this.showRestaurantOptions();
+        else {
+            System.out.println(Message.INVALID_CHOICE);
+            this.showRestaurantOptions();
+        }
     }
     private void showLocation(){
         System.out.println("location of restaurant : "+getCurrentRestaurant().getLocationNode());

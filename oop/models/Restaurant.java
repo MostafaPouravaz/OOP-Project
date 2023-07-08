@@ -65,7 +65,7 @@ public class Restaurant {
         this.foodType.add(ID);
     }
     public void editFoodType(int ID, FoodType foodType) {
-        this.foodType.set(ID-1,FoodType.getIntFromFoodType(foodType));
+        this.foodType.set(ID,FoodType.getIntFromFoodType(foodType));
     }
 
     public ArrayList<Food> getFood() {
@@ -94,6 +94,15 @@ public class Restaurant {
     public static ArrayList<Restaurant> getAllRestaurant() {
         return Restaurant.allRestaurant;
     }
+    public static ArrayList<Restaurant> getVendorsRestaurant(int vendorID) {
+        ArrayList<Restaurant> vendorRestaurants = new ArrayList<>();
+        for (Restaurant restaurant : allRestaurant) {
+            if (restaurant.getID_Owner() == vendorID)
+                vendorRestaurants.add(restaurant);
+        }
+        return vendorRestaurants;
+    }
+
     public static Restaurant getRestaurantByRestaurantName(String name) {
         for (Restaurant restaurant : Restaurant.allRestaurant) {
             if (restaurant.name.equals(name)) {
@@ -154,4 +163,5 @@ public class Restaurant {
         }
         RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(ID,customerID).editRate(rate);
     }
+
 }
