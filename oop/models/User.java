@@ -1,9 +1,12 @@
 package models;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public abstract class User {
-
     private final static ArrayList<User> allUsers = new ArrayList<>();
 
     private static int id = 0;
@@ -12,11 +15,20 @@ public abstract class User {
     private String username;
     private String password;
 
-    public User(String username, String password) {
+    public User(String username, String password) throws IOException {
         this.userId = ++id;
         this.username = username;
         this.password = password;
         User.allUsers.add(this);
+
+    }
+    public addUserTOFile(User user){
+        try (FileWriter writer = new FileWriter("User", true)) {
+            gson.toJson(user, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static User getUserByUsername(String username) {

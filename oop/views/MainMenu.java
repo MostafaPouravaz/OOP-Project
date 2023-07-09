@@ -6,14 +6,19 @@ import enums.Message;
 import models.*;
 import models.Order;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class MainMenu extends Menu{
     private static MainMenu instance = null;
-
+    LocalDateTime startTime;
+    private static int period ;
+    private static boolean isDelivery = false;
     private final MainController controller;
     private static Restaurant currentRestaurant = null;
     private static Cart currentCart = null;
+    private static Delivery currentDelivery = null;
 
     public static Restaurant getCurrentRestaurant() {
         return MainMenu.currentRestaurant;
@@ -75,10 +80,11 @@ public class MainMenu extends Menu{
         System.out.println("5. confirm order");
         System.out.println("6. charge account");
         System.out.println("7. display account charge");
-        System.out.println("8. back");
+        System.out.println("8. show estimated delivery time");
+        System.out.println("9. back");
     }
 
-    private void handleCustomerChoice(String choice) {
+    private void handleCustomerChoice(String choice) throws IOException {
         switch (choice) {
             case "1" -> this.showRestaurantsForCustomer();
             case "2" -> this.searchRestaurant();
@@ -87,7 +93,8 @@ public class MainMenu extends Menu{
             case "5" -> this.handleConfirmOrderForCustomer();
             case "6" -> this.handleChargeAccountForCustomer();
             case "7" -> this.handleDisplayAccountChargeForCustomer();
-            case "8" -> RegisterMenu.getInstance().run();
+            case "8" -> this.handleShowEstimatedDeliveryTime();
+            case "9" -> RegisterMenu.getInstance().run();
             default -> System.out.println(Message.INVALID_CHOICE);
         }
     }
@@ -103,7 +110,11 @@ public class MainMenu extends Menu{
         if (loggedInUser instanceof Vendor) {
             this.handleVendorChoice(choice);
         } else if (loggedInUser instanceof Customer) {
-            this.handleCustomerChoice(choice);
+            try {
+                this.handleCustomerChoice(choice);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
@@ -845,19 +856,59 @@ public class MainMenu extends Menu{
             this.run();
     }
 
-    private void handleConfirmOrderForCustomer(){
-        new Order(currentCart);
-        System.out.println(Message.SUCCESS+"\n0. back\n1. show estimated delivery time" );
-        String choice = this.getChoice();
-        switch (choice.trim()) {
-            case "0" -> this.run();
-            case "1" -> this.handleShowEstimatedDeliveryTime();
-            default -> System.out.println(Message.INVALID_CHOICE);
+    private void handleConfirmOrderForCustomer() throws IOException {
+        if(!haveDelivery() && isDelivery){
+            isDelivery = false;
+            period = 0;
+            startTime = null;
         }
+        if(currentCart.getChosenFoods().size()==0 || currentCart==null)
+            System.out.println("please choose food first ");
+        else {
+            System.out.println("where is your address ? (number of node) :");
 
+            String choice = this.getChoice();
+            int destination = Integer.parseInt(choice);
+            currentDelivery = new Delivery(currentRestaurant.getLocationNode(), destination);
+
+            new Order(currentCart);
+            isDelivery = true;
+            period = (int) (currentDelivery.shortestDistinction()*10);
+            this.timer(period);
+            currentCart = null;
+            System.out.println(Message.SUCCESS + "\n0. back\n1. show estimated delivery time");
+
+            choice = this.getChoice();
+            switch (choice.trim()) {
+                case "0" -> this.run();
+                case "1" -> this.handleShowEstimatedDeliveryTime();
+                default -> System.out.println(Message.INVALID_CHOICE);
+            }
+        }
     }
-    private void handleShowEstimatedDeliveryTime(){ // after set location and delivery
-        //continue
+    private void handleShowEstimatedDeliveryTime(){
+        if(!haveDelivery() && isDelivery){
+            isDelivery = false;
+            period = 0;
+            startTime = null;
+        }
+        if(!this.haveDelivery()) {
+            System.out.println("you have no any orders .");
+            this.run();
+        }else {
+            System.out.println("the estimated delivery time is : ");
+            System.out.println(startTime.plusSeconds(period));
+            this.run();
+        }
+    }
+    public void timer (int timePeriod){
+        this.startTime = LocalDateTime.now();
+        this.period = timePeriod * 60;
+    }
+    public boolean haveDelivery(){
+        if (!isDelivery)
+            return false;
+        return LocalDateTime.now().isBefore(startTime.plusSeconds(period));
     }
 
     private void handleChargeAccountForCustomer(){

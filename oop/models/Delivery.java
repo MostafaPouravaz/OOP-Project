@@ -17,7 +17,7 @@ public class Delivery {
     public ArrayList<String> shortestPath(){
         return new ArrayList<>(List.of(map.getShortestPath(source, destination).split(" -> ")));
     }
-    public ArrayList<Integer> pathFinder(){
+    public ArrayList<Integer> weightOfEdges(){
         ArrayList<String> path = shortestPath();
         ArrayList<Integer> path1 = new ArrayList<>();
         for (int i=0; i<path.size()-1; i++){
