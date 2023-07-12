@@ -30,7 +30,7 @@ public class Order {
         return counterID;
     }
 
-    private int finalPrice;
+    private int finalPrice = 0;
     //private int offPercent;
     private static int counterID=0;
     private final static ArrayList<Order> allOrders = new ArrayList<>(); //History
@@ -44,12 +44,11 @@ public class Order {
     }
 
     public Order(Cart cart){
+        for (Food orderedFood : orderedFoods) this.finalPrice += orderedFood.getPrice();
+        this.customerID = cart.getCustomerID();
         this.restaurantName = Restaurant.getRestaurantByRestaurantID(cart.getRestaurantID()).getName();
         this.orderedFoods = cart.getChosenFoods();
-        this.customerID = cart.getCustomerID();
-        this.orderID=++counterID;
-        this.finalPrice =0;
-        for (Food orderedFood : orderedFoods) this.finalPrice += orderedFood.getPrice();
+        this.orderID = ++counterID;
         allOrders.add(this);
     }
 }

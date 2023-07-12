@@ -6,6 +6,8 @@ import models.User;
 import models.Vendor;
 import views.Menu;
 
+import java.io.IOException;
+
 public class RegisterController extends Controller{
     private static RegisterController instance = null;
 
@@ -57,7 +59,7 @@ public class RegisterController extends Controller{
 
     }
 
-    public Message handleCreateCustomer(String username, String password, String repeatedPassword) {
+    public Message handleCreateCustomer(String username, String password, String repeatedPassword) throws IOException {
         if (this.doesUsernameExist(username)) {
             return Message.USER_EXIST;
         }
@@ -69,7 +71,7 @@ public class RegisterController extends Controller{
         return Message.SUCCESS;
     }
 
-    public Message handleCreateVendor(String username, String password, String repeatedPassword) {
+    public Message handleCreateVendor(String username, String password, String repeatedPassword) throws IOException {
         if (this.doesUsernameExist(username)) {
             return Message.USER_EXIST;
         }

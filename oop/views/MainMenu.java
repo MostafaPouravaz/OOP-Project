@@ -18,6 +18,7 @@ public class MainMenu extends Menu{
     private final MainController controller;
     private static Restaurant currentRestaurant = null;
     private static Cart currentCart = null;
+    private static Order currentOrder = null;
     private static Delivery currentDelivery = null;
 
     public static Restaurant getCurrentRestaurant() {
@@ -865,24 +866,32 @@ public class MainMenu extends Menu{
         if(currentCart.getChosenFoods().size()==0 || currentCart==null)
             System.out.println("please choose food first ");
         else {
-            System.out.println("where is your address ? (number of node) :");
+            Customer loggedInUser = (Customer) Menu.getLoggedInUser();
 
-            String choice = this.getChoice();
-            int destination = Integer.parseInt(choice);
-            currentDelivery = new Delivery(currentRestaurant.getLocationNode(), destination);
+            currentOrder = new Order(currentCart);
+            if(currentOrder.getFinalPrice()>=loggedInUser.getCharge()) {
+                currentOrder = null;
+                System.out.println("please charge your account first");
+            }
+            else {
+                System.out.println("where is your address ? (number of node) :");
 
-            new Order(currentCart);
-            isDelivery = true;
-            period = (int) (currentDelivery.shortestDistinction()*10);
-            this.timer(period);
-            currentCart = null;
-            System.out.println(Message.SUCCESS + "\n0. back\n1. show estimated delivery time");
+                String choice = this.getChoice();
+                int destination = Integer.parseInt(choice);
+                currentDelivery = new Delivery(currentRestaurant.getLocationNode(), destination);
 
-            choice = this.getChoice();
-            switch (choice.trim()) {
-                case "0" -> this.run();
-                case "1" -> this.handleShowEstimatedDeliveryTime();
-                default -> System.out.println(Message.INVALID_CHOICE);
+                isDelivery = true;
+                period = (int) (currentDelivery.shortestDistinction() * 10);
+                this.timer(period);
+                currentCart = null;
+                System.out.println(Message.SUCCESS + "\n0. back\n1. show estimated delivery time");
+
+                choice = this.getChoice();
+                switch (choice.trim()) {
+                    case "0" -> this.run();
+                    case "1" -> this.handleShowEstimatedDeliveryTime();
+                    default -> System.out.println(Message.INVALID_CHOICE);
+                }
             }
         }
     }

@@ -1,10 +1,10 @@
 package models;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
 public class Customer extends User {
     private int charge = 0;
-    public Customer(String username, String password) {
+    public Customer(String username, String password) throws IOException {
         super(username, password);
         this.charge = 0;
     }
