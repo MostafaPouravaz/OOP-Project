@@ -9,6 +9,7 @@ import models.Order;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainMenu extends Menu{
     private static MainMenu instance = null;
@@ -255,10 +256,72 @@ public class MainMenu extends Menu{
 
     private void openOrders() {
     //edit status and deliver time
+        System.out.println("Open Orders :");
+        for (int i=0; i<currentOrder.openOrders().size(); i++){
+            System.out.println((i+1) + ". customer Name : " + Objects.requireNonNull(User.getUserByUserID(currentOrder.openOrders().get(i).getCustomerID())).getUsername() );
+        }
+        System.out.println("if you want more details about each order, choose it please." +
+                "\nelse enter no.");
+        String choice = this.getChoice();
+        if (choice.equals("no"))
+            showRestaurantOptions();
+        else{
+            int num = Integer.parseInt(choice)-1;
+            System.out.println("Customer Name : " + Objects.requireNonNull(User.getUserByUserID(currentOrder.openOrders().get(num).getCustomerID())).getUsername()
+                    +" | Destination node : " + currentOrder.openOrders().get(num).getDestinationNode() + " | Final price : " + currentOrder.openOrders().get(num).getFinalPrice()
+                    + "\nStatus : " + currentOrder.openOrders().get(num).getStatus() +" | Order confirmation time : " + currentOrder.openOrders().get(num).getStartTime() + " | Estimated order delivery time : " + currentOrder.openOrders().get(num).getStartTime().plusSeconds(currentOrder.openOrders().get(num).getEstimatedTime())
+                    +"\nOrdered Foods :");
+            for (int i=0; i<currentOrder.openOrders().get(num).getOrderedFoods().size(); i++){
+                System.out.println((i+1) + ". " + currentOrder.openOrders().get(num).getOrderedFoods().get(i).getName());
+            }
+            System.out.println("Choose option : \n1. Change status\n2.Change estimated order delivery time\n3.back");
+            String choice1 = this.getChoice();
+            switch (choice1) {
+                case "1" -> this.changeStatus(num);
+                case "2" -> this.changeEstimatedDeliveryTime(num);
+                case "3" -> this.showRestaurantOptions();
+                default -> System.out.println(Message.INVALID_CHOICE);
+            }
+        }
+    }
+
+    private void changeEstimatedDeliveryTime(int num) {
+        int estimatedTime = Integer.parseInt(this.getInput("Enter new estimated time in seconds"));
+        currentOrder.openOrders().get(num).setEstimatedTime(estimatedTime);
+        System.out.println(Message.SUCCESS);
+        openOrders();
+    }
+
+    private void changeStatus(int num) {
+        String newStatus = this.getInput("Enter new status");
+        currentOrder.openOrders().get(num).setStatus(newStatus);
+        System.out.println(Message.SUCCESS);
+        openOrders();
     }
 
     private void showOrderHistory() {
-
+        System.out.println("Order History :");
+        for (int i=0; i<currentOrder.pastOrders().size(); i++){
+            System.out.println((i+1) + ". customer Name : " + Objects.requireNonNull(User.getUserByUserID(currentOrder.pastOrders().get(i).getCustomerID())).getUsername() );
+        }
+        System.out.println("if you want more details about each order, choose it please." +
+                "\nelse enter no.");
+        String choice = this.getChoice();
+        if (choice.equals("no"))
+            showRestaurantOptions();
+        else{
+            int num = Integer.parseInt(choice)-1;
+            System.out.println("customer Name : " + Objects.requireNonNull(User.getUserByUserID(currentOrder.pastOrders().get(num).getCustomerID())).getUsername()
+            +" | destination node : " + currentOrder.pastOrders().get(num).getDestinationNode() + " | final price : " + currentOrder.pastOrders().get(num).getFinalPrice()
+            +"\nOrder confirmation time : " + currentOrder.pastOrders().get(num).getStartTime() + " | Order delivery time : " + currentOrder.pastOrders().get(num).getStartTime().plusSeconds(currentOrder.pastOrders().get(num).getEstimatedTime())
+            +"\nOrdered Foods :");
+            for (int i=0; i<currentOrder.pastOrders().get(num).getOrderedFoods().size(); i++){
+                System.out.println((i+1) + ". " + currentOrder.pastOrders().get(num).getOrderedFoods().get(i).getName());
+            }
+            System.out.println("press a key to back");
+            if (!this.getChoice().isEmpty())
+                showRestaurantOptions();
+        }
     }
 
     private void displayRestaurantComments() {
@@ -867,10 +930,7 @@ public class MainMenu extends Menu{
             System.out.println("please choose food first ");
         else {
             Customer loggedInUser = (Customer) Menu.getLoggedInUser();
-
-            currentOrder = new Order(currentCart);
             if(currentOrder.getFinalPrice()>=loggedInUser.getCharge()) {
-                currentOrder = null;
                 System.out.println("please charge your account first");
             }
             else {
@@ -883,6 +943,7 @@ public class MainMenu extends Menu{
                 isDelivery = true;
                 period = (int) (currentDelivery.shortestDistinction() * 10);
                 this.timer(period);
+                currentOrder = new Order(currentCart,period,LocalDateTime.now(),destination);
                 currentCart = null;
                 System.out.println(Message.SUCCESS + "\n0. back\n1. show estimated delivery time");
 
