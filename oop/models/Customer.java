@@ -3,7 +3,7 @@ package models;
 import java.io.IOException;
 
 public class Customer extends User {
-    private int charge = 0;
+    private int charge ;
     public Customer(String username, String password, String animalName) throws IOException {
         super(username, password, animalName);
         this.charge = 0;
@@ -28,11 +28,9 @@ public class Customer extends User {
             return true;
         }
 
-        if (!(obj instanceof Customer)) {
+        if (!(obj instanceof Customer customer)) {
             return false;
         }
-
-        Customer customer = (Customer) obj;
 
         return this.getUserId() == customer.getUserId();
     }

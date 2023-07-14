@@ -2,6 +2,7 @@ package models;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Order {
     //arraylist from current orders
@@ -61,10 +62,10 @@ public class Order {
     }
 
     public Order(Cart cart,int estimatedTime, LocalDateTime startTime, int destinationNode){
+        this.orderedFoods = cart.getChosenFoods();
         for (Food orderedFood : orderedFoods) this.finalPrice += orderedFood.getPrice();
         this.customerID = cart.getCustomerID();
-        this.restaurantName = Restaurant.getRestaurantByRestaurantID(cart.getRestaurantID()).getName();
-        this.orderedFoods = cart.getChosenFoods();
+        this.restaurantName = Objects.requireNonNull(Restaurant.getRestaurantByRestaurantID(cart.getRestaurantID())).getName();
         this.orderID = ++counterID;
         this.destinationNode = destinationNode;
         this.startTime = startTime;
