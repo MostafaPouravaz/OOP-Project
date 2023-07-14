@@ -20,7 +20,6 @@ public class MainMenu extends Menu{
     private static Restaurant currentRestaurant = null;
     private static Cart currentCart = null;
     private static Order currentOrder = null;
-    private static Delivery currentDelivery = null;
 
     public static Restaurant getCurrentRestaurant() {
         return MainMenu.currentRestaurant;
@@ -779,10 +778,10 @@ public class MainMenu extends Menu{
 
 
     private void searchRestaurant() {
-
         String choice = this.getChoice();
         ArrayList<Restaurant> allSearchedRestaurants = this.controller.handleSearchRestaurants(choice);
         System.out.println("0. search restaurant");
+        System.out.println("1.back");
         for (Restaurant allSearchedRestaurant : allSearchedRestaurants)
             System.out.println(allSearchedRestaurant.getID() + ". " + allSearchedRestaurant.getName());
 
@@ -792,7 +791,8 @@ public class MainMenu extends Menu{
         String choice = this.getChoice();
         if(choice.equals("0"))
             this.searchRestaurant();
-
+        else if(choice.equals("1"))
+            this.run();
         else {
             setCurrentRestaurant(controller.handleChooseRestaurant(choice));
             this.handleShowRestaurantOptionForCustomer();
@@ -921,7 +921,7 @@ public class MainMenu extends Menu{
     }
 
     private void handleConfirmOrderForCustomer() throws IOException {
-        if(!haveDelivery() && isDelivery){
+        if(haveDelivery() && isDelivery){
             isDelivery = false;
             period = 0;
             startTime = null;
@@ -938,7 +938,7 @@ public class MainMenu extends Menu{
 
                 String choice = this.getChoice();
                 int destination = Integer.parseInt(choice);
-                currentDelivery = new Delivery(currentRestaurant.getLocationNode(), destination);
+                Delivery currentDelivery = new Delivery(currentRestaurant.getLocationNode(), destination);
 
                 isDelivery = true;
                 period = (int) (currentDelivery.shortestDistinction() * 10);
@@ -957,12 +957,12 @@ public class MainMenu extends Menu{
         }
     }
     private void handleShowEstimatedDeliveryTime(){
-        if(!haveDelivery() && isDelivery){
+        if(haveDelivery() && isDelivery){
             isDelivery = false;
             period = 0;
             startTime = null;
         }
-        if(!this.haveDelivery()) {
+        if(this.haveDelivery()) {
             System.out.println("you have no any orders .");
             this.run();
         }else {
@@ -973,11 +973,11 @@ public class MainMenu extends Menu{
     }
     public void timer (int timePeriod){
         this.startTime = LocalDateTime.now();
-        this.period = timePeriod * 60;
+        period = timePeriod * 60;
     }
     public boolean haveDelivery(){
         if (!isDelivery)
-            return false;
+            return true;
         return LocalDateTime.now().isBefore(startTime.plusSeconds(period));
     }
 
@@ -990,7 +990,9 @@ public class MainMenu extends Menu{
         User loggedInUser = Menu.getLoggedInUser();
 
         Customer user = (Customer) User.getUserByUserID(loggedInUser.getUserId());
-        user.setCharge(charge);
+        if (user != null) {
+            user.setCharge(charge);
+        }
 
         System.out.println(Message.SUCCESS);
         this.run();
@@ -1000,7 +1002,7 @@ public class MainMenu extends Menu{
         User loggedInUser = Menu.getLoggedInUser();
 
         Customer user = (Customer) User.getUserByUserID(loggedInUser.getUserId());
-        int charge = user.getCharge();
+        int charge = user != null ? user.getCharge() : 0;
         System.out.println("0. back");
         System.out.println("The charge of account : "+charge + " $" );
 
