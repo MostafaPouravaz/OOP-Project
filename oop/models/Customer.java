@@ -4,8 +4,8 @@ import java.io.IOException;
 
 public class Customer extends User {
     private int charge = 0;
-    public Customer(String username, String password) throws IOException {
-        super(username, password);
+    public Customer(String username, String password, String animalName) throws IOException {
+        super(username, password, animalName);
         this.charge = 0;
     }
 

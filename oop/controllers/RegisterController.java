@@ -58,8 +58,30 @@ public class RegisterController extends Controller{
         return Message.WRONG_CREDENTIALS;
 
     }
+    public Message handleForgetPassword(String username, String animalName) {
+        User user = User.getUserByUsername(username);
 
-    public Message handleCreateCustomer(String username, String password, String repeatedPassword) throws IOException {
+        if (user != null && user.getAnimalName().equals(animalName)) {
+            return Message.SUCCESS;
+        }
+        return Message.WRONG_CREDENTIALS;
+    }
+    public Message handleChangePassword(String username, String password, String repeatedPassword) {
+        User user = User.getUserByUsername(username);
+
+        if (user == null ) {
+            return Message.USER_DONT_EXIST;
+        }
+        Message message;
+        if ((message = this.validatePassword(password, repeatedPassword)) != Message.SUCCESS) {
+            return message;
+        }
+        user.setPassword(password);
+        return Message.SUCCESS;
+
+    }
+
+    public Message handleCreateCustomer(String username, String password, String repeatedPassword, String animalName) throws IOException {
         if (this.doesUsernameExist(username)) {
             return Message.USER_EXIST;
         }
@@ -67,11 +89,11 @@ public class RegisterController extends Controller{
         if ((message = this.validatePassword(password, repeatedPassword)) != Message.SUCCESS) {
             return message;
         }
-        new Customer(username, password);
+        new Customer(username, password,animalName);
         return Message.SUCCESS;
     }
 
-    public Message handleCreateVendor(String username, String password, String repeatedPassword) throws IOException {
+    public Message handleCreateVendor(String username, String password, String repeatedPassword, String animalName) throws IOException {
         if (this.doesUsernameExist(username)) {
             return Message.USER_EXIST;
         }
@@ -79,7 +101,7 @@ public class RegisterController extends Controller{
         if ((message = this.validatePassword(password, repeatedPassword)) != Message.SUCCESS) {
             return message;
         }
-        new Vendor(username, password);
+        new Vendor(username, password, animalName);
         return Message.SUCCESS;
     }
 }
