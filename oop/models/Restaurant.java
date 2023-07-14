@@ -149,6 +149,8 @@ public class Restaurant {
     }
     public int getFinalRate() {
         finalRate = 0;
+        if (allRatings == null)
+            return -1;
         for (RatingForRestaurant rating : allRatings) finalRate += rating.getRate();
         return finalRate/ allRatings.size();
     }

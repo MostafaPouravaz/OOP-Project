@@ -44,10 +44,31 @@ public class RegisterMenu extends Menu{
                 }
             }
             case "2", "login" -> this.login();
-            case "3", "exit" -> this.exit();
+            case "3", "forget password" -> this.forgetPassword();
+            case "4", "exit" -> this.exit();
             default -> System.out.println(Message.INVALID_CHOICE);
         }
 
+    }
+
+    private void forgetPassword() {
+        String username = this.getInput("enter username");
+        String animalName = this.getInput("enter your favorite animal name");
+        Message message = this.controller.handleForgetPassword(username, animalName);
+        if (message == Message.SUCCESS) {
+            this.changePassword(username);
+        } else {
+            System.out.println(message);
+        }
+        this.run();
+    }
+
+    private void changePassword(String username) {
+        String password = this.getInput("enter new password");
+        String repeatedPassword = this.getInput("repeat password");
+        Message message = this.controller.handleChangePassword(username, password, repeatedPassword);
+        System.out.println(message);
+        this.run();
     }
 
     private void exit() {
@@ -85,7 +106,8 @@ public class RegisterMenu extends Menu{
         String username = this.getInput("enter username");
         String password = this.getInput("enter password");
         String repeatedPassword = this.getInput("repeat password");
-        Message message = this.controller.handleCreateCustomer(username, password, repeatedPassword);
+        String animalName = this.getInput("your favorite animal name");
+        Message message = this.controller.handleCreateCustomer(username, password, repeatedPassword,animalName);
         if (message==Message.SUCCESS){
             System.out.println("customer registered successfully");
             User user = User.getUserByUsername(username);
@@ -99,7 +121,8 @@ public class RegisterMenu extends Menu{
         String username = this.getInput("enter username");
         String password = this.getInput("enter password");
         String repeatedPassword = this.getInput("repeat password");
-        Message message = this.controller.handleCreateVendor(username, password, repeatedPassword);
+        String animalName = this.getInput("your favorite animal name");
+        Message message = this.controller.handleCreateVendor(username, password, repeatedPassword,animalName);
         if (message==Message.SUCCESS){
             System.out.println("vendor registered successfully");
             User user = User.getUserByUsername(username);
@@ -114,7 +137,7 @@ public class RegisterMenu extends Menu{
         System.out.println("enter one of the options");
         System.out.println("1. register");
         System.out.println("2. login");
-        System.out.println("3. exit");
-
+        System.out.println("3. forget password");
+        System.out.println("4. exit");
     }
 }

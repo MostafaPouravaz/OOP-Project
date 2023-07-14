@@ -1,7 +1,6 @@
 package models;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 //edit setter getter
 //comment
@@ -117,6 +116,8 @@ public class Food {
 
     public int getFinalRate() {
         finalRate = 0;
+        if (ratings == null)
+            return -1;
         for (RatingForFood rating : ratings) finalRate += rating.getRate();
         return finalRate/ratings.size();
     }

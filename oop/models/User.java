@@ -11,13 +11,14 @@ public abstract class User {
     private final int userId;
     private String username;
     private String password;
+    private String animalName;
 
-    public User(String username, String password) throws IOException {
+    public User(String username, String password, String animalName) throws IOException {
         this.userId = ++id;
         this.username = username;
         this.password = password;
+        this.animalName = animalName;
         User.allUsers.add(this);
-
     }
 //    public addUserTOFile(User user){
 //        try (FileWriter writer = new FileWriter("User", true)) {
@@ -27,6 +28,9 @@ public abstract class User {
 //        }
 //
 //    }
+public String getAnimalName() {
+    return animalName;
+}
 
     public static User getUserByUsername(String username) {
         for (User user : User.allUsers) {
