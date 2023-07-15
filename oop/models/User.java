@@ -5,9 +5,7 @@ import java.util.ArrayList;
 
 public abstract class User {
     private final static ArrayList<User> allUsers = new ArrayList<>();
-
     private static int id = 0;
-
     private final int userId;
     private String username;
     private String password;
@@ -65,7 +63,5 @@ public String getAnimalName() {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 
 }

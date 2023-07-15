@@ -104,7 +104,7 @@ public class MainMenu extends Menu{
 
         String choice = this.getChoice();
 
-        User loggedInUser = Menu.getLoggedInUser();
+            User loggedInUser = Menu.getLoggedInUser();
 
         if (loggedInUser instanceof Vendor) {
             this.handleVendorChoice(choice);
@@ -1031,7 +1031,7 @@ public class MainMenu extends Menu{
             this.run();
         }else {
             System.out.println("the estimated delivery time is : ");
-            System.out.println(startTime.plusSeconds(period));
+            System.out.println(startTime.plusSeconds(currentOrder.getEstimatedTime()));
             this.run();
         }
     }
