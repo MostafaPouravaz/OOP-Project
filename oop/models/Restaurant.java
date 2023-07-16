@@ -139,8 +139,8 @@ public class Restaurant {
             if (comment1.getCustomerID() == customerID)
                 comment1.editComment(comment);
         }
-        CommentForRestaurant.getCommentByRestaurantIDAndCostumerID(ID,customerID).editComment(comment);
-    }
+        if(CommentForRestaurant.getCommentByRestaurantIDAndCostumerID(ID,customerID) != null)
+            CommentForRestaurant.getCommentByRestaurantIDAndCostumerID(ID, customerID).editComment(comment);    }
     public void addOrEditResponse(int commentID, String response) {
         for (CommentForRestaurant comment1 : allComments) {
             if(comment1.getCommentID()==commentID)
@@ -163,7 +163,8 @@ public class Restaurant {
             if (rating.getCustomerID() == customerID)
                 rating.editRate(rate);
         }
-        RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(ID,customerID).editRate(rate);
+        if(RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(ID,customerID) != null)
+            RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(ID,customerID).editRate(rate);
     }
 
 }
