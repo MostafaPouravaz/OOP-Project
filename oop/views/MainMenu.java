@@ -598,7 +598,7 @@ public class MainMenu extends Menu{
         getCurrentRestaurant().getFood().remove(getCurrentFood());
         setCurrentFood(null);
         System.out.println(Message.SUCCESS);
-        foodMenu();
+        this.menu();
     }
 
     private void editPrice() {
