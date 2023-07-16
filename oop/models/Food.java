@@ -141,13 +141,15 @@ public class Food {
             if (rating.getCustomerID() == customerID)
                 rating.editRate(rate);
         }
-        RatingForFood.getRatingByFoodIDAndCostumerID(ID,customerID).editRate(rate);
+        if( RatingForFood.getRatingByFoodIDAndCostumerID(ID,customerID)!=null)
+            RatingForFood.getRatingByFoodIDAndCostumerID(ID,customerID).editRate(rate);
     }
     public void editComment(int customerID, String comment) {
         for (CommentForFood comment1 : comments) {
             if (comment1.getCustomerID() == customerID) {
                 comment1.editComment(comment);
-                CommentForFood.getCommentByFoodIDAndCostumerID(ID, customerID).editComment(comment);
+                if(CommentForFood.getCommentByFoodIDAndCostumerID(ID, customerID) != null)
+                    CommentForFood.getCommentByFoodIDAndCostumerID(ID, customerID).editComment(comment);
                 break;
             }
         }
