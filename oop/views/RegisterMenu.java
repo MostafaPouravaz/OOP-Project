@@ -4,8 +4,6 @@ import controllers.RegisterController;
 import enums.Message;
 import models.User;
 
-import java.io.IOException;
-
 public class RegisterMenu extends Menu{
     private static RegisterMenu instance = null;
 
@@ -36,13 +34,7 @@ public class RegisterMenu extends Menu{
         String choice = this.getChoice();
 
         switch (choice) {
-            case "1", "register" -> {
-                try {
-                    this.register();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            case "1", "register" -> this.register();
             case "2", "login" -> this.login();
             case "3", "forget password" -> this.forgetPassword();
             case "4", "exit" -> this.exit();
@@ -88,7 +80,7 @@ public class RegisterMenu extends Menu{
         this.run();
     }
 
-    private void register() throws IOException {
+    private void register()  {
         System.out.println("enter register as vendor or customer");
         String choice = this.getChoice();
 
@@ -102,7 +94,7 @@ public class RegisterMenu extends Menu{
         }
     }
 
-    private void registerCustomer() throws IOException {
+    private void registerCustomer()  {
         String username = this.getInput("enter username");
         String password = this.getInput("enter password");
         String repeatedPassword = this.getInput("repeat password");
@@ -117,7 +109,7 @@ public class RegisterMenu extends Menu{
         this.run();
     }
 
-    private void registerVendor() throws IOException {
+    private void registerVendor()  {
         String username = this.getInput("enter username");
         String password = this.getInput("enter password");
         String repeatedPassword = this.getInput("repeat password");

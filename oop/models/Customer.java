@@ -1,10 +1,8 @@
 package models;
 
-import java.io.IOException;
-
 public class Customer extends User {
     private int charge ;
-    public Customer(String username, String password, String animalName) throws IOException {
+    public Customer(String username, String password, String animalName) {
         super(username, password, animalName);
         this.charge = 0;
     }

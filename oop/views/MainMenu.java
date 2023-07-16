@@ -1,5 +1,6 @@
 package views;
 
+import com.google.gson.Gson;
 import controllers.*;
 import enums.*;
 import models.*;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainMenu extends Menu{
+    Gson gson = new Gson();
     private static MainMenu instance = null;
     LocalDateTime startTime;
     private static int period ;
@@ -17,7 +19,7 @@ public class MainMenu extends Menu{
     private final MainController controller;
     private static Restaurant currentRestaurant = null;
     private static Cart currentCart = null;
-    private static Order currentOrder = null;
+    private static Order currentOrder = new Order();
 
     public static Restaurant getCurrentRestaurant() {
         return MainMenu.currentRestaurant;
@@ -169,7 +171,7 @@ public class MainMenu extends Menu{
                 3. SeaFood
                 4. Appetizer
                 5. other"""))-1));
-        getCurrentRestaurant().setFoodType(getCurrentFoodType().ordinal());
+        getCurrentRestaurant().setFoodTypes(getCurrentFoodType().ordinal());
         System.out.println("FoodType added successfully\ndo you want to add another food type?");
         String ans = this.getChoice();
         if (ans.equals("yes"))
@@ -182,7 +184,7 @@ public class MainMenu extends Menu{
         }
     }
     private void addFood() {
-        if (getCurrentRestaurant().getFoodType() == null){
+        if (getCurrentRestaurant().getFoodTypes() == null){
             System.out.println("there is no food type\nplease add food type first");
             addFoodType();
         }else {
@@ -208,10 +210,10 @@ public class MainMenu extends Menu{
 
     private FoodType chooseFoodType() {
         System.out.println("choose one food type");
-        for (int i=0; i<getCurrentRestaurant().getFoodType().size(); i++)
-            System.out.println((i+1)+". "+ FoodType.getFoodTypeFromInt(getCurrentRestaurant().getFoodType().get(i)));
+        for (int i = 0; i<getCurrentRestaurant().getFoodTypes().size(); i++)
+            System.out.println((i+1)+". "+ FoodType.getFoodTypeFromInt(getCurrentRestaurant().getFoodTypes().get(i)));
         int input = Integer.parseInt(this.getChoice())-1;
-        return FoodType.getFoodTypeFromInt(getCurrentRestaurant().getFoodType().get(input));
+        return FoodType.getFoodTypeFromInt(getCurrentRestaurant().getFoodTypes().get(input));
     }
 
     private void showRestaurants() {
@@ -414,13 +416,13 @@ public class MainMenu extends Menu{
         }
     }
     private void showAndAddFoodTypes() {
-        if (getCurrentRestaurant().getFoodType() == null){
+        if (getCurrentRestaurant().getFoodTypes() == null){
             System.out.println("there is no food type\nplease add food type first");
             this.addFoodType();
         }else {
             System.out.println("Food types are :");
-            for (int i=0; i<getCurrentRestaurant().getFoodType().size(); i++)
-                System.out.println((i+1)+". "+ FoodType.getFoodTypeFromInt(getCurrentRestaurant().getFoodType().get(i)));
+            for (int i=0; i<getCurrentRestaurant().getFoodTypes().size(); i++)
+                System.out.println((i+1)+". "+ FoodType.getFoodTypeFromInt(getCurrentRestaurant().getFoodTypes().get(i)));
             System.out.println("do you want to add foodType?");
             String choice = this.getChoice();
             if (choice.equals("yes"))
@@ -448,32 +450,32 @@ public class MainMenu extends Menu{
     private void menu() {
         //name id price discount
 
-        if (getCurrentRestaurant().getFood() == null){
+        if (getCurrentRestaurant().getFoods() == null){
             System.out.println("there is no food\nplease add food");
             addFood();
         }else {
             System.out.println("Menu : ");
-            for (int i=0; i<getCurrentRestaurant().getFood().size(); i++){
-                System.out.print((i+1)+ ". \nName: " + getCurrentRestaurant().getFood().get(i).getName()+
-                        " | ID: "+getCurrentRestaurant().getFood().get(i).getID()+" | Price: "+ getCurrentRestaurant().getFood().get(i).getPrice());
-                if (getCurrentRestaurant().getFood().get(i).isActive())
+            for (int i = 0; i<getCurrentRestaurant().getFoods().size(); i++){
+                System.out.print((i+1)+ ". \nName: " + getCurrentRestaurant().getFoods().get(i).getName()+
+                        " | ID: "+getCurrentRestaurant().getFoods().get(i).getID()+" | Price: "+ getCurrentRestaurant().getFoods().get(i).getPrice());
+                if (getCurrentRestaurant().getFoods().get(i).isActive())
                     System.out.print(" | Active : YES");
                 else System.out.print(" | Active: NO");
-                if (getCurrentRestaurant().getFood().get(i).discountActive())
-                    System.out.print(" | discountActive : YES" + " | discount percent :" + getCurrentRestaurant().getFood().get(i).getDiscount()+"%");
+                if (getCurrentRestaurant().getFoods().get(i).discountActive())
+                    System.out.print(" | discountActive : YES" + " | discount percent :" + getCurrentRestaurant().getFoods().get(i).getDiscount()+"%");
                 else System.out.print(" | discountActive: NO");
             }
-            System.out.println("\n"+(getCurrentRestaurant().getFood().size()+1)+". add food\n" +(getCurrentRestaurant().getFood().size()+2) +". back\nchoose one");
+            System.out.println((getCurrentRestaurant().getFoods().size()+1)+"\n. add food\n" +(getCurrentRestaurant().getFoods().size()+2) +". back\nchoose one");
             int j= Integer.parseInt(this.getChoice())-1;
-            if (j>getCurrentRestaurant().getFood().size()) {
+            if (j>getCurrentRestaurant().getFoods().size()) {
                 System.out.println(Message.INVALID_CHOICE);
                 menu();
-            }else if (j==getCurrentRestaurant().getFood().size())
+            }else if (j==getCurrentRestaurant().getFoods().size())
                 addFood();
-            else if (j==getCurrentRestaurant().getFood().size()+1)
+            else if (j==getCurrentRestaurant().getFoods().size()+1)
                 showRestaurantOptions();
             else {
-                setCurrentFood(getCurrentRestaurant().getFood().get(j));
+                setCurrentFood(getCurrentRestaurant().getFoods().get(j));
                 foodMenu();
             }
         }
@@ -595,7 +597,7 @@ public class MainMenu extends Menu{
     }
 
     private void deleteFood() {
-        getCurrentRestaurant().getFood().remove(getCurrentFood());
+        getCurrentRestaurant().getFoods().remove(getCurrentFood());
         setCurrentFood(null);
         System.out.println(Message.SUCCESS);
         this.menu();
@@ -616,12 +618,12 @@ public class MainMenu extends Menu{
     }
 
     private void editFoodType(){
-        if (getCurrentRestaurant().getFoodType() == null){
+        if (getCurrentRestaurant().getFoodTypes() == null){
             System.out.println("there is no food type");
         }else {
             System.out.println("Food types are :");
-            for (int i=0; i<getCurrentRestaurant().getFoodType().size(); i++)
-                System.out.println((i+1)+". "+ FoodType.getFoodTypeFromInt(getCurrentRestaurant().getFoodType().get(i)));
+            for (int i = 0; i<getCurrentRestaurant().getFoodTypes().size(); i++)
+                System.out.println((i+1)+". "+ FoodType.getFoodTypeFromInt(getCurrentRestaurant().getFoodTypes().get(i)));
             String choice = getInput("choose one to edit");
             System.out.println("""
                 choose new FoodType between these items:\s
@@ -644,7 +646,7 @@ public class MainMenu extends Menu{
         System.out.println("0. back");
         System.out.println("Restaurants list :");
         for (Restaurant allRestaurant : allRestaurants)
-            System.out.println(allRestaurant.getID() + ". " + allRestaurant.getName());
+            System.out.println(allRestaurant.getRestaurantID() + ". " + allRestaurant.getName());
 
         this.chooseRestaurantForCustomer();
     }
@@ -656,7 +658,7 @@ public class MainMenu extends Menu{
             setCurrentRestaurant(controller.handleChooseRestaurant(choice));
             User loggedInUser = Menu.getLoggedInUser();
 
-            setCurrentCart(loggedInUser.getUserId() , currentRestaurant.getID());
+            setCurrentCart(loggedInUser.getUserId() , currentRestaurant.getRestaurantID());
             this.handleShowRestaurantOptionForCustomer();
         }
     }
@@ -855,7 +857,7 @@ public class MainMenu extends Menu{
         System.out.println("0. search restaurant");
         System.out.println("1.back");
         for (Restaurant allSearchedRestaurant : allSearchedRestaurants)
-            System.out.println(allSearchedRestaurant.getID() + ". " + allSearchedRestaurant.getName());
+            System.out.println(allSearchedRestaurant.getRestaurantID() + ". " + allSearchedRestaurant.getName());
 
         this.chooseSearchedRestaurantForCustomer();
     }

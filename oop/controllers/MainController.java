@@ -29,7 +29,7 @@ public class MainController extends Controller{
         return Restaurant.getAllRestaurant();
     }
     public ArrayList<Food> handleShowFoods() {
-        return MainMenu.getCurrentRestaurant().getFood();
+        return MainMenu.getCurrentRestaurant().getFoods();
     }
     public ArrayList<Restaurant> handleSearchRestaurants(String choice) {
         ArrayList <Restaurant> searchedRestaurants = new ArrayList<>();
@@ -41,9 +41,9 @@ public class MainController extends Controller{
 
     public ArrayList<Food> handleSearchFoods(String choice) {
         ArrayList <Food> searchedFoods = new ArrayList<>();
-        for(int i=0 ; i<MainMenu.getCurrentRestaurant().getFood().size() ; i++)
-            if(MainMenu.getCurrentRestaurant().getFood().get(i).getName().contains(choice))
-                searchedFoods.add(MainMenu.getCurrentRestaurant().getFood().get(i));
+        for(int i = 0; i<MainMenu.getCurrentRestaurant().getFoods().size() ; i++)
+            if(MainMenu.getCurrentRestaurant().getFoods().get(i).getName().contains(choice))
+                searchedFoods.add(MainMenu.getCurrentRestaurant().getFoods().get(i));
         return searchedFoods;
     }
 
@@ -58,8 +58,8 @@ public class MainController extends Controller{
 
     public Food handleChooseFood(String choice) {
         int i = Integer.parseInt(choice.trim())-1;
-        if (i<MainMenu.getCurrentRestaurant().getFood().size())
-            return MainMenu.getCurrentRestaurant().getFood().get(i);
+        if (i<MainMenu.getCurrentRestaurant().getFoods().size())
+            return MainMenu.getCurrentRestaurant().getFoods().get(i);
         else
             return null;
     }
@@ -72,9 +72,9 @@ public class MainController extends Controller{
     public Message handleAddFood(String name, int price, int foodType) {
         User loggedInUser = Menu.getLoggedInUser();
         Restaurant currentRestaurant = MainMenu.getCurrentRestaurant();
-        Food newFood = new Food(name, price, currentRestaurant.getID(), foodType);
+        Food newFood = new Food(name, price, currentRestaurant.getRestaurantID(), foodType);
         MainMenu.setCurrentFood(newFood);
-        currentRestaurant.setFood(newFood);
+        currentRestaurant.setFoods(newFood);
         return Message.SUCCESS;
     }
 

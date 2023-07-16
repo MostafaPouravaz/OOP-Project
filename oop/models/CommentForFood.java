@@ -1,9 +1,16 @@
 package models;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class CommentForFood {
-    private final static ArrayList<CommentForFood> allComments = new ArrayList<>();
+    private static ArrayList<CommentForFood> allComments = new ArrayList<>();
     private int foodID;
     private int customerID;
     private String Comment;
@@ -19,6 +26,7 @@ public class CommentForFood {
     public void setResponse(int commentID,String response) {
         this.response = response;
         allComments.get(commentID-1).response = response;
+        saveFoodCommentToFile();
     }
 
 
@@ -45,6 +53,7 @@ public class CommentForFood {
     public void editComment(String comment) {
         this.Comment = comment;
         allComments.get(this.getCommentID()-1).Comment = comment;
+        saveFoodCommentToFile();
     }
 
     public CommentForFood(int foodID, int customerID, String comment) {
@@ -52,9 +61,11 @@ public class CommentForFood {
         this.customerID = customerID;
         this.Comment = comment;
         this.commentID = ++counterID;
-        allComments.add(this);
+        addComment(this);
     }
     public static CommentForFood getCommentByFoodIDAndCostumerID(int foodID , int costumer_ID) {
+        if (loadFoodCommentFromFile() != null)
+            allComments = new ArrayList<>(loadFoodCommentFromFile());
         for (CommentForFood allComment : allComments) {
             if (allComment.getCustomerID() == costumer_ID && allComment.getFoodID() == foodID)
                 return allComment;
@@ -62,6 +73,41 @@ public class CommentForFood {
         return null;
     }
     public static CommentForFood getCommentByCommentID(int commentID) {
+        if (loadFoodCommentFromFile() != null)
+            allComments = new ArrayList<>(loadFoodCommentFromFile());
         return allComments.get(commentID-1);
+    }
+    private void addComment(CommentForFood commentForFood) {
+        if (loadFoodCommentFromFile() != null)
+            allComments = new ArrayList<>(loadFoodCommentFromFile());
+        allComments.add(commentForFood);
+        saveFoodCommentToFile();
+    }
+    public static void saveFoodCommentToFile(){
+        try {
+            FileWriter fileWriterFoodComment = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\foodComments.json");
+            Gson gson = new Gson();
+            gson.toJson(allComments, fileWriterFoodComment);
+            fileWriterFoodComment.close();
+        } catch (IOException e) {
+            System.out.println("problem in writing");
+        }
+    }
+    public static ArrayList<CommentForFood> loadFoodCommentFromFile(){
+        try {
+            FileReader fileReaderFoodComment = null;
+            fileReaderFoodComment = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\foodComment.json");
+            Type type = new TypeToken<ArrayList<CommentForFood>>(){}.getType();
+            Gson gson = new Gson();
+            ArrayList<CommentForFood> allC = new ArrayList<>();
+            allC = gson.fromJson(fileReaderFoodComment,type);
+            fileReaderFoodComment.close();
+            allComments = new ArrayList<>();
+            allComments.addAll(allC);
+            counterID = allComments.size();
+        } catch (IOException e) {
+            System.out.println("problem in reading");
+        }
+        return allComments;
     }
 }
