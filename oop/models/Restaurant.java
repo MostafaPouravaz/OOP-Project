@@ -226,7 +226,8 @@ public class Restaurant {
             allR = gson.fromJson(fileReaderRestaurant,type);
             fileReaderRestaurant.close();
             allRestaurant = new ArrayList<>();
-            allRestaurant.addAll(allR);
+            if (allR != null)
+                allRestaurant.addAll(allR);
             ID_Counter = allRestaurant.size();
         } catch (IOException e) {
             System.out.println("problem in reading");
@@ -253,7 +254,8 @@ public class Restaurant {
             allR = gson.fromJson(fileReaderRatingForRestaurant,type);
             fileReaderRatingForRestaurant.close();
             allRatings = new ArrayList<>();
-            allRatings.addAll(allR);
+            if (allR != null)
+                allRatings.addAll(allR);
         } catch (IOException e) {
             System.out.println("problem in reading");
         }
@@ -279,7 +281,8 @@ public class Restaurant {
             allC = gson.fromJson(fileReaderCommentForRestaurant,type);
             fileReaderCommentForRestaurant.close();
             allComments = new ArrayList<>();
-            allComments.addAll(allC);
+            if (allC != null)
+                allComments.addAll(allC);
         } catch (IOException e) {
             System.out.println("problem in reading");
         }
@@ -305,7 +308,8 @@ public class Restaurant {
             allF = gson.fromJson(fileReaderRestaurantFood,type);
             fileReaderRestaurantFood.close();
             foods = new ArrayList<>();
-            foods.addAll(allF);
+            if (allF != null)
+                foods.addAll(allF);
         } catch (IOException e) {
             System.out.println("problem in reading");
         }
@@ -331,7 +335,8 @@ public class Restaurant {
             allF = gson.fromJson(fileReaderRestaurantFoodType,type);
             fileReaderRestaurantFoodType.close();
             foodTypes = new ArrayList<>();
-            foodTypes.addAll(allF);
+            if (allF != null)
+                foodTypes.addAll(allF);
         } catch (IOException e) {
             System.out.println("problem in reading");
         }

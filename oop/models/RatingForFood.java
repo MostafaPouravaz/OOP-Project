@@ -76,7 +76,8 @@ public class RatingForFood {
             allR = gson.fromJson(fileReaderFoodRating,type);
             fileReaderFoodRating.close();
             allRatings = new ArrayList<>();
-            allRatings.addAll(allR);
+            if (allR != null)
+                allRatings.addAll(allR);
             counterID = allRatings.size();
         } catch (IOException e) {
             System.out.println("problem in reading");

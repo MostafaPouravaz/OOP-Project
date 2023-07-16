@@ -108,7 +108,8 @@ public abstract class User {
             allU = gsonCus.fromJson(fileReaderCustomer,typeCus);
             fileReaderCustomer.close();
             allUsers = new ArrayList<>();
-            allUsers.addAll(allU);
+            if (allU != null)
+                allUsers = (ArrayList<User>) allU.clone();
             FileReader fileReaderVendor = null;
             fileReaderVendor = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\vendors.json");
             Type typeVen = new TypeToken<ArrayList<Vendor>>(){}.getType();
@@ -116,7 +117,8 @@ public abstract class User {
             Gson gsonVen = new Gson();
             allU = gsonVen.fromJson(fileReaderVendor,typeVen);
             fileReaderVendor.close();
-            allUsers.addAll(allU);
+            if (allU != null)
+                allUsers.addAll(allU);
             id = allUsers.size();
         } catch (IOException e) {
             System.out.println("problem in reading");

@@ -2,7 +2,7 @@ import views.RegisterMenu;
 
 import java.io.File;
 
-//file map order va oon problem
+//maybe we have a problem in files
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello\nWelcome to MalFood!");

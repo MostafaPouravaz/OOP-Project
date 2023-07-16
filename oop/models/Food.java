@@ -227,7 +227,8 @@ public class Food {
             allF = gson.fromJson(fileReaderFood,type);
             fileReaderFood.close();
             allFoods = new ArrayList<>();
-            allFoods.addAll(allF);
+            if (allF != null)
+                allFoods.addAll(allF);
             IDCounter = allFoods.size();
         } catch (IOException e) {
             System.out.println("problem in reading");
@@ -254,7 +255,8 @@ public class Food {
             allR = gson.fromJson(fileReaderRatingForFood,type);
             fileReaderRatingForFood.close();
             allRatings = new ArrayList<>();
-            allRatings.addAll(allR);
+            if (allR != null)
+                allRatings.addAll(allR);
         } catch (IOException e) {
             System.out.println("problem in reading");
         }
@@ -280,7 +282,8 @@ public class Food {
             allC = gson.fromJson(fileReaderCommentForFood,type);
             fileReaderCommentForFood.close();
             allComments = new ArrayList<>();
-            allComments.addAll(allC);
+            if (allC != null)
+                allComments.addAll(allC);
         } catch (IOException e) {
             System.out.println("problem in reading");
         }

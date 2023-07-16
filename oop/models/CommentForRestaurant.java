@@ -104,7 +104,8 @@ public class CommentForRestaurant {
             allC = gson.fromJson(fileReaderRestaurantComment,type);
             fileReaderRestaurantComment.close();
             allComments = new ArrayList<>();
-            allComments.addAll(allC);
+            if (allC != null)
+                allComments.addAll(allC);
             counterID = allComments.size();
         } catch (IOException e) {
             System.out.println("problem in reading");

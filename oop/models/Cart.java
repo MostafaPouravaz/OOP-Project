@@ -73,7 +73,8 @@ public class Cart {
             allC = gson.fromJson(fileReaderCart,type);
             fileReaderCart.close();
             allPersonCart = new ArrayList<>();
-            allPersonCart.addAll(allC);
+            if (allC != null)
+                allPersonCart.addAll(allC);
         } catch (IOException e) {
             System.out.println("problem in reading");
         }
@@ -99,7 +100,8 @@ public class Cart {
             allC = gson.fromJson(fileReaderChosenFoods,type);
             fileReaderChosenFoods.close();
             chosenFoods = new ArrayList<>();
-            chosenFoods.addAll(allC);
+            if (allC != null)
+                chosenFoods.addAll(allC);
         } catch (IOException e) {
             System.out.println("problem in reading");
         }

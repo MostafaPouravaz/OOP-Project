@@ -157,7 +157,8 @@ public class Order {
             allO = gson.fromJson(fileReaderOrder,type);
             fileReaderOrder.close();
             allOrders = new ArrayList<>();
-            allOrders.addAll(allO);
+            if (allO != null)
+                allOrders.addAll(allO);
             counterID = allOrders.size();
         } catch (IOException e) {
             System.out.println("problem in reading");
@@ -184,7 +185,8 @@ public class Order {
             allO = gson.fromJson(fileReaderOrderFoods,type);
             fileReaderOrderFoods.close();
             orderedFoods = new ArrayList<>();
-            orderedFoods.addAll(allO);
+            if (allO != null)
+                orderedFoods.addAll(allO);
         } catch (IOException e) {
             System.out.println("problem in reading");
         }
