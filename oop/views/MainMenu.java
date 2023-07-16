@@ -896,7 +896,7 @@ public class MainMenu extends Menu{
     private void handleDisplayRatingForCustomer(){
         System.out.println("0. back");
 
-        currentRestaurant.getFinalRate();
+        System.out.println(currentRestaurant.getFinalRate());
         String choice = this.getChoice();
         if(choice.trim().equals("0"))
             this.handleShowRestaurantOptionForCustomer();
