@@ -765,13 +765,20 @@ public class MainMenu extends Menu{
 
     }
     private void handleEditCommentsOfFoodForCustomer(){
-        System.out.println("please type your comment");
         String choice = this.getChoice();
         User loggedInUser = Menu.getLoggedInUser();
+        System.out.println("please type your ID comment");
+        if(currentFood.getComments().get(Integer.parseInt(choice)).getCustomerID() == loggedInUser.getUserId()) {
 
-        currentFood.editComment(loggedInUser.getUserId() , choice);
-        System.out.println(Message.SUCCESS);
-        this.handleShowFoodOptionForCustomer();
+            System.out.println("please type your comment");
+            choice = this.getChoice();
+
+            currentFood.editComment(loggedInUser.getUserId(), choice);
+            System.out.println(Message.SUCCESS);
+            this.handleShowFoodOptionForCustomer();
+        }
+        else
+            System.out.println("you can not change this comment");
     }
     private void handleDisplayRatingOfFoodForCustomer(){
         System.out.println("0. back");
@@ -884,13 +891,20 @@ public class MainMenu extends Menu{
     }
 
     private void handleEditRestaurantCommentForCustomer(){
-        System.out.println("please type your comment");
-        String choice = this.getChoice();
         User loggedInUser = Menu.getLoggedInUser();
+        System.out.println("please type your ID comment");
+        String choice = this.getChoice();
+        if(currentRestaurant.getAllComments().get(Integer.parseInt(choice)).getCustomerID() == loggedInUser.getUserId()) {
 
-        currentRestaurant.editComment(loggedInUser.getUserId() , choice);
-        System.out.println(Message.SUCCESS);
-        this.handleShowRestaurantOptionForCustomer();
+            System.out.println("please type your comment");
+            choice = this.getChoice();
+
+            currentRestaurant.editComment(loggedInUser.getUserId(), choice);
+            System.out.println(Message.SUCCESS);
+            this.handleShowRestaurantOptionForCustomer();
+        }
+        else
+            System.out.println("you can not edit this comment");
     }
 
     private void handleDisplayRatingForCustomer(){
