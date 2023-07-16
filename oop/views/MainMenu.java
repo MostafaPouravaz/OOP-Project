@@ -463,7 +463,7 @@ public class MainMenu extends Menu{
                     System.out.print(" | discountActive : YES" + " | discount percent :" + getCurrentRestaurant().getFood().get(i).getDiscount()+"%");
                 else System.out.print(" | discountActive: NO");
             }
-            System.out.println((getCurrentRestaurant().getFood().size()+1)+"\n. add food\n" +(getCurrentRestaurant().getFood().size()+2) +". back\nchoose one");
+            System.out.println("\n"+(getCurrentRestaurant().getFood().size()+1)+". add food\n" +(getCurrentRestaurant().getFood().size()+2) +". back\nchoose one");
             int j= Integer.parseInt(this.getChoice())-1;
             if (j>getCurrentRestaurant().getFood().size()) {
                 System.out.println(Message.INVALID_CHOICE);

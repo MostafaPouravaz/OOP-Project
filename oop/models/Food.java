@@ -5,7 +5,7 @@ import java.util.ArrayList;
 //edit setter getter
 //comment
 public class Food {
-    private ArrayList<RatingForFood> ratings = new ArrayList<>();
+    private ArrayList<RatingForFood> ratings = null;
     private ArrayList<CommentForFood> comments = new ArrayList<>();
     private int finalRate;
     private String name;
