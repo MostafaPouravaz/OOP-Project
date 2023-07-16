@@ -447,6 +447,7 @@ public class MainMenu extends Menu{
     }
     private void menu() {
         //name id price discount
+
         if (getCurrentRestaurant().getFood() == null){
             System.out.println("there is no food\nplease add food");
             addFood();
