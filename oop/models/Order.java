@@ -17,8 +17,8 @@ public class Order {
     private static ArrayList<Food> orderedFoods = new ArrayList<>();
     private static ArrayList<Order> allOrders = new ArrayList<>(); //History
     public ArrayList<Food> getOrderedFoods() {
-        if (loadOrderFoodsFromFile() != null)
-            orderedFoods = new ArrayList<>(loadOrderFoodsFromFile());
+        if (loadOrderFromFile() != null)
+            allOrders = new ArrayList<>(loadOrderFromFile());
         return orderedFoods;
     }
 
@@ -139,7 +139,7 @@ public class Order {
     }
     public static void saveOrderToFile(){
         try {
-            FileWriter fileWriterOrder = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\orders.json");
+            FileWriter fileWriterOrder = new FileWriter("oop\\files\\orders.json");
             Gson gson = new Gson();
             gson.toJson(allOrders, fileWriterOrder);
             fileWriterOrder.close();
@@ -150,7 +150,7 @@ public class Order {
     public static ArrayList<Order> loadOrderFromFile(){
         try {
             FileReader fileReaderOrder = null;
-            fileReaderOrder = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\orders.json");
+            fileReaderOrder = new FileReader("oop\\files\\orders.json");
             Type type = new TypeToken<ArrayList<Order>>(){}.getType();
             Gson gson = new Gson();
             ArrayList<Order> allO = new ArrayList<>();
@@ -165,31 +165,31 @@ public class Order {
         }
         return allOrders;
     }
-    public static void saveOrderFoodsToFile(){
-        try {
-            FileWriter fileWriterOrderFoods = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\orderFoods.json");
-            Gson gson = new Gson();
-            gson.toJson(orderedFoods, fileWriterOrderFoods);
-            fileWriterOrderFoods.close();
-        } catch (IOException e) {
-            System.out.println("problem in writing");
-        }
-    }
-    public static ArrayList<Food> loadOrderFoodsFromFile(){
-        try {
-            FileReader fileReaderOrderFoods = null;
-            fileReaderOrderFoods = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\orderFoods.json");
-            Type type = new TypeToken<ArrayList<Food>>(){}.getType();
-            Gson gson = new Gson();
-            ArrayList<Food> allO = new ArrayList<>();
-            allO = gson.fromJson(fileReaderOrderFoods,type);
-            fileReaderOrderFoods.close();
-            orderedFoods = new ArrayList<>();
-            if (allO != null)
-                orderedFoods.addAll(allO);
-        } catch (IOException e) {
-            System.out.println("problem in reading");
-        }
-        return orderedFoods;
-    }
+//    public static void saveOrderFoodsToFile(){
+//        try {
+//            FileWriter fileWriterOrderFoods = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\orderFoods.json");
+//            Gson gson = new Gson();
+//            gson.toJson(orderedFoods, fileWriterOrderFoods);
+//            fileWriterOrderFoods.close();
+//        } catch (IOException e) {
+//            System.out.println("problem in writing");
+//        }
+//    }
+//    public static ArrayList<Food> loadOrderFoodsFromFile(){
+//        try {
+//            FileReader fileReaderOrderFoods = null;
+//            fileReaderOrderFoods = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\orderFoods.json");
+//            Type type = new TypeToken<ArrayList<Food>>(){}.getType();
+//            Gson gson = new Gson();
+//            ArrayList<Food> allO = new ArrayList<>();
+//            allO = gson.fromJson(fileReaderOrderFoods,type);
+//            fileReaderOrderFoods.close();
+//            orderedFoods = new ArrayList<>();
+//            if (allO != null)
+//                orderedFoods.addAll(allO);
+//        } catch (IOException e) {
+//            System.out.println("problem in reading");
+//        }
+//        return orderedFoods;
+//    }
 }

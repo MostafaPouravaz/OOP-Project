@@ -29,11 +29,11 @@ public class Cart {
     public void deleteFood(Food chosenFood){
         chosenFoods.remove(chosenFood);
         System.out.println(Message.SUCCESS);
-        saveChosenFoodsToFile();
+        saveCartToFile();
     }
     public ArrayList<Food> getChosenFoods() {
-        if (loadChosenFoodsFromFile() != null)
-            chosenFoods = new ArrayList<>(loadChosenFoodsFromFile());
+        if (loadCartFromFile() != null)
+            allPersonCart = new ArrayList<>(loadCartFromFile());
         return chosenFoods;
     }
     public int getCustomerID() {
@@ -55,7 +55,7 @@ public class Cart {
     }
     public static void saveCartToFile(){
         try {
-            FileWriter fileWriterCart = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\carts.json");
+            FileWriter fileWriterCart = new FileWriter("oop\\files\\carts.json");
             Gson gson = new Gson();
             gson.toJson(allPersonCart, fileWriterCart);
             fileWriterCart.close();
@@ -66,7 +66,7 @@ public class Cart {
     public static ArrayList<Cart> loadCartFromFile(){
         try {
             FileReader fileReaderCart = null;
-            fileReaderCart = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\carts.json");
+            fileReaderCart = new FileReader("oop\\files\\carts.json");
             Type type = new TypeToken<ArrayList<Cart>>(){}.getType();
             Gson gson = new Gson();
             ArrayList<Cart> allC = new ArrayList<>();
@@ -80,32 +80,32 @@ public class Cart {
         }
         return allPersonCart;
     }
-    public static void saveChosenFoodsToFile(){
-        try {
-            FileWriter fileWriterChosenFoods = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\chosenFoods.json");
-            Gson gson = new Gson();
-            gson.toJson(chosenFoods, fileWriterChosenFoods);
-            fileWriterChosenFoods.close();
-        } catch (IOException e) {
-            System.out.println("problem in writing");
-        }
-    }
-    public static ArrayList<Food> loadChosenFoodsFromFile(){
-        try {
-            FileReader fileReaderChosenFoods = null;
-            fileReaderChosenFoods = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\chosenFoods.json");
-            Type type = new TypeToken<ArrayList<Food>>(){}.getType();
-            Gson gson = new Gson();
-            ArrayList<Food> allC = new ArrayList<>();
-            allC = gson.fromJson(fileReaderChosenFoods,type);
-            fileReaderChosenFoods.close();
-            chosenFoods = new ArrayList<>();
-            if (allC != null)
-                chosenFoods.addAll(allC);
-        } catch (IOException e) {
-            System.out.println("problem in reading");
-        }
-        return chosenFoods;
-    }
+//    public static void saveChosenFoodsToFile(){
+//        try {
+//            FileWriter fileWriterChosenFoods = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\chosenFoods.json");
+//            Gson gson = new Gson();
+//            gson.toJson(chosenFoods, fileWriterChosenFoods);
+//            fileWriterChosenFoods.close();
+//        } catch (IOException e) {
+//            System.out.println("problem in writing");
+//        }
+//    }
+//    public static ArrayList<Food> loadChosenFoodsFromFile(){
+//        try {
+//            FileReader fileReaderChosenFoods = null;
+//            fileReaderChosenFoods = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\chosenFoods.json");
+//            Type type = new TypeToken<ArrayList<Food>>(){}.getType();
+//            Gson gson = new Gson();
+//            ArrayList<Food> allC = new ArrayList<>();
+//            allC = gson.fromJson(fileReaderChosenFoods,type);
+//            fileReaderChosenFoods.close();
+//            chosenFoods = new ArrayList<>();
+//            if (allC != null)
+//                chosenFoods.addAll(allC);
+//        } catch (IOException e) {
+//            System.out.println("problem in reading");
+//        }
+//        return chosenFoods;
+//    }
 
 }

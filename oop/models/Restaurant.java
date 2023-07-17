@@ -78,8 +78,8 @@ public class Restaurant {
     }
 
     public ArrayList<Integer> getFoodTypes() {
-        if (loadRestaurantFoodTypeFromFile() != null)
-            foodTypes = new ArrayList<>(loadRestaurantFoodTypeFromFile());
+        if (loadRestaurantFromFile() != null)
+            allRestaurant = new ArrayList<>(loadRestaurantFromFile());
         return foodTypes;
     }
 
@@ -89,33 +89,34 @@ public class Restaurant {
 
     public void setFoodTypes(int ID) {
         foodTypes.add(ID);
-        saveRestaurantFoodTypeToFile();
+        saveRestaurantToFile();
     }
     public void editFoodType(int ID, FoodType foodType) {
         foodTypes.set(ID,FoodType.getIntFromFoodType(foodType));
-        saveRestaurantFoodTypeToFile();
+        saveRestaurantToFile();
     }
 
     public ArrayList<Food> getFoods() {
-        if (loadRestaurantFoodFromFile() != null)
-            foods = new ArrayList<>(loadRestaurantFoodFromFile());
+        if (loadRestaurantFromFile() != null)
+            allRestaurant = new ArrayList<>(loadRestaurantFromFile());
         return foods;
     }
 
     public ArrayList<RatingForRestaurant> getAllRatings() {
-        if (loadRatingForRestaurantFromFile() != null)
-            allRatings = new ArrayList<>(loadRatingForRestaurantFromFile());
+        if (loadRestaurantFromFile() != null)
+            allRestaurant = new ArrayList<>(loadRestaurantFromFile());
         return allRatings;
     }
 
     public ArrayList<CommentForRestaurant> getAllComments() {
-        if (loadCommentForRestaurantFromFile() != null)
-            allComments = new ArrayList<>(loadCommentForRestaurantFromFile());
+        if (loadRestaurantFromFile() != null)
+            allRestaurant = new ArrayList<>(loadRestaurantFromFile());
         return allComments;
     }
 
     public void setFoods(Food foods) {
         this.foods.add(foods);
+        saveRestaurantToFile();
     }
     public static ArrayList<Restaurant> getAllRestaurant() {
         if (loadRestaurantFromFile() != null)
@@ -153,8 +154,8 @@ public class Restaurant {
     }
 
     public void showComments() {
-        if (loadCommentForRestaurantFromFile() != null)
-            allComments = new ArrayList<>(loadCommentForRestaurantFromFile());
+        if (loadRestaurantFromFile() != null)
+            allRestaurant = new ArrayList<>(loadRestaurantFromFile());
         for (int i = 0; allComments.size()>i; i++){
             System.out.println(i+1 + ". \n" +
                     Customer.getUserByUserID(allComments.get(i).getCustomerID()).getUsername() + " :"
@@ -165,7 +166,7 @@ public class Restaurant {
     }
     public void addComment(int customerID, String comment){
         allComments.add(new CommentForRestaurant(RestaurantID, customerID, comment));
-        saveCommentForRestaurantToFile();
+        saveRestaurantToFile();
     }
     public void editComment(int customerID, String comment) {
         for (CommentForRestaurant comment1 : allComments) {
@@ -174,18 +175,18 @@ public class Restaurant {
         }
         if(CommentForRestaurant.getCommentByRestaurantIDAndCostumerID(RestaurantID,customerID) != null)
             CommentForRestaurant.getCommentByRestaurantIDAndCostumerID(RestaurantID, customerID).editComment(comment);
-        saveCommentForRestaurantToFile();
+        saveRestaurantToFile();
     }
     public void addOrEditResponse(int commentID, String response) {
         for (CommentForRestaurant comment1 : allComments) {
             if(comment1.getCommentID()==commentID)
                 comment1.setResponse(commentID , response);
         }
-        saveCommentForRestaurantToFile();
+        saveRestaurantToFile();
     }
     public int getFinalRate() {
-        if (loadRatingForRestaurantFromFile() != null)
-            allRatings = new ArrayList<>(loadRatingForRestaurantFromFile());
+        if (loadRestaurantFromFile() != null)
+            allRestaurant = new ArrayList<>(loadRestaurantFromFile());
         finalRate = 0;
         if (allRatings == null)
             return -1;
@@ -195,7 +196,7 @@ public class Restaurant {
 
     public void addRate(int customerID, double rate){
         allRatings.add(new RatingForRestaurant(RestaurantID, customerID, rate));
-        saveRatingForRestaurantToFile();
+        saveRestaurantToFile();
     }
     public void editRate(int customerID, double rate) {
         for (RatingForRestaurant rating : allRatings) {
@@ -204,11 +205,11 @@ public class Restaurant {
         }
         if(RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(RestaurantID,customerID) != null)
             RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(RestaurantID,customerID).editRate(rate);
-        saveRatingForRestaurantToFile();
+        saveRestaurantToFile();
     }
     public static void saveRestaurantToFile(){
         try {
-            FileWriter fileWriterRestaurant = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\restaurants.json");
+            FileWriter fileWriterRestaurant = new FileWriter("oop\\files\\restaurants.json");
             Gson gson = new Gson();
             gson.toJson(allRestaurant, fileWriterRestaurant);
             fileWriterRestaurant.close();
@@ -219,7 +220,7 @@ public class Restaurant {
     public static ArrayList<Restaurant> loadRestaurantFromFile(){
         try {
             FileReader fileReaderRestaurant = null;
-            fileReaderRestaurant = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\restaurants.json");
+            fileReaderRestaurant = new FileReader("oop\\files\\restaurants.json");
             Type type = new TypeToken<ArrayList<Restaurant>>(){}.getType();
             Gson gson = new Gson();
             ArrayList<Restaurant> allR = new ArrayList<>();
@@ -234,112 +235,112 @@ public class Restaurant {
         }
         return allRestaurant;
     }
-    public static void saveRatingForRestaurantToFile(){
-        try {
-            FileWriter fileWriterRatingForRestaurant = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\ratingForRestaurant.json");
-            Gson gson = new Gson();
-            gson.toJson(allRatings, fileWriterRatingForRestaurant);
-            fileWriterRatingForRestaurant.close();
-        } catch (IOException e) {
-            System.out.println("problem in writing");
-        }
-    }
-    public static ArrayList<RatingForRestaurant> loadRatingForRestaurantFromFile(){
-        try {
-            FileReader fileReaderRatingForRestaurant = null;
-            fileReaderRatingForRestaurant = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\ratingForRestaurant.json");
-            Type type = new TypeToken<ArrayList<RatingForRestaurant>>(){}.getType();
-            Gson gson = new Gson();
-            ArrayList<RatingForRestaurant> allR = new ArrayList<>();
-            allR = gson.fromJson(fileReaderRatingForRestaurant,type);
-            fileReaderRatingForRestaurant.close();
-            allRatings = new ArrayList<>();
-            if (allR != null)
-                allRatings.addAll(allR);
-        } catch (IOException e) {
-            System.out.println("problem in reading");
-        }
-        return allRatings;
-    }
-    public static void saveCommentForRestaurantToFile(){
-        try {
-            FileWriter fileWriterCommentForRestaurant = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\commentForRestaurant.json");
-            Gson gson = new Gson();
-            gson.toJson(allComments, fileWriterCommentForRestaurant);
-            fileWriterCommentForRestaurant.close();
-        } catch (IOException e) {
-            System.out.println("problem in writing");
-        }
-    }
-    public static ArrayList<CommentForRestaurant> loadCommentForRestaurantFromFile(){
-        try {
-            FileReader fileReaderCommentForRestaurant = null;
-            fileReaderCommentForRestaurant = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\commentForRestaurant.json");
-            Type type = new TypeToken<ArrayList<CommentForRestaurant>>(){}.getType();
-            Gson gson = new Gson();
-            ArrayList<CommentForRestaurant> allC = new ArrayList<>();
-            allC = gson.fromJson(fileReaderCommentForRestaurant,type);
-            fileReaderCommentForRestaurant.close();
-            allComments = new ArrayList<>();
-            if (allC != null)
-                allComments.addAll(allC);
-        } catch (IOException e) {
-            System.out.println("problem in reading");
-        }
-        return allComments;
-    }
-    public static void saveRestaurantFoodToFile(){
-        try {
-            FileWriter fileWriterRestaurantFood = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\restaurantFoods.json");
-            Gson gson = new Gson();
-            gson.toJson(foods, fileWriterRestaurantFood);
-            fileWriterRestaurantFood.close();
-        } catch (IOException e) {
-            System.out.println("problem in writing");
-        }
-    }
-    public static ArrayList<Food> loadRestaurantFoodFromFile(){
-        try {
-            FileReader fileReaderRestaurantFood = null;
-            fileReaderRestaurantFood = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\restaurantFoods.json");
-            Type type = new TypeToken<ArrayList<Food>>(){}.getType();
-            Gson gson = new Gson();
-            ArrayList<Food> allF = new ArrayList<>();
-            allF = gson.fromJson(fileReaderRestaurantFood,type);
-            fileReaderRestaurantFood.close();
-            foods = new ArrayList<>();
-            if (allF != null)
-                foods.addAll(allF);
-        } catch (IOException e) {
-            System.out.println("problem in reading");
-        }
-        return foods;
-    }
-    public static void saveRestaurantFoodTypeToFile(){
-        try {
-            FileWriter fileWriterRestaurantFoodType = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\restaurantFoodTypes.json");
-            Gson gson = new Gson();
-            gson.toJson(foodTypes, fileWriterRestaurantFoodType);
-            fileWriterRestaurantFoodType.close();
-        } catch (IOException e) {
-            System.out.println("problem in writing");
-        }
-    }
-    public static ArrayList<Integer> loadRestaurantFoodTypeFromFile(){
-        try {
-            FileReader fileReaderRestaurantFoodType = null;
-            fileReaderRestaurantFoodType = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\restaurantFoodTypes.json");
-            Type type = new TypeToken<ArrayList<Integer>>(){}.getType();
-            Gson gson = new Gson();
-            ArrayList<Integer> allF = new ArrayList<>();
-            allF = gson.fromJson(fileReaderRestaurantFoodType,type);
-            fileReaderRestaurantFoodType.close();
-            foodTypes = new ArrayList<>();
-            if (allF != null)
-                foodTypes.addAll(allF);
-        } catch (IOException e) {
-            System.out.println("problem in reading");
-        }
-        return foodTypes;
-    }
+//    public static void saveRatingForRestaurantToFile(){
+//        try {
+//            FileWriter fileWriterRatingForRestaurant = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\ratingForRestaurant.json");
+//            Gson gson = new Gson();
+//            gson.toJson(allRatings, fileWriterRatingForRestaurant);
+//            fileWriterRatingForRestaurant.close();
+//        } catch (IOException e) {
+//            System.out.println("problem in writing");
+//        }
+//    }
+//    public static ArrayList<RatingForRestaurant> loadRatingForRestaurantFromFile(){
+//        try {
+//            FileReader fileReaderRatingForRestaurant = null;
+//            fileReaderRatingForRestaurant = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\ratingForRestaurant.json");
+//            Type type = new TypeToken<ArrayList<RatingForRestaurant>>(){}.getType();
+//            Gson gson = new Gson();
+//            ArrayList<RatingForRestaurant> allR = new ArrayList<>();
+//            allR = gson.fromJson(fileReaderRatingForRestaurant,type);
+//            fileReaderRatingForRestaurant.close();
+//            allRatings = new ArrayList<>();
+//            if (allR != null)
+//                allRatings.addAll(allR);
+//        } catch (IOException e) {
+//            System.out.println("problem in reading");
+//        }
+//        return allRatings;
+//    }
+//    public static void saveCommentForRestaurantToFile(){
+//        try {
+//            FileWriter fileWriterCommentForRestaurant = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\commentForRestaurant.json");
+//            Gson gson = new Gson();
+//            gson.toJson(allComments, fileWriterCommentForRestaurant);
+//            fileWriterCommentForRestaurant.close();
+//        } catch (IOException e) {
+//            System.out.println("problem in writing");
+//        }
+//    }
+//    public static ArrayList<CommentForRestaurant> loadCommentForRestaurantFromFile(){
+//        try {
+//            FileReader fileReaderCommentForRestaurant = null;
+//            fileReaderCommentForRestaurant = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\commentForRestaurant.json");
+//            Type type = new TypeToken<ArrayList<CommentForRestaurant>>(){}.getType();
+//            Gson gson = new Gson();
+//            ArrayList<CommentForRestaurant> allC = new ArrayList<>();
+//            allC = gson.fromJson(fileReaderCommentForRestaurant,type);
+//            fileReaderCommentForRestaurant.close();
+//            allComments = new ArrayList<>();
+//            if (allC != null)
+//                allComments.addAll(allC);
+//        } catch (IOException e) {
+//            System.out.println("problem in reading");
+//        }
+//        return allComments;
+//    }
+//    public static void saveRestaurantFoodToFile(){
+//        try {
+//            FileWriter fileWriterRestaurantFood = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\restaurantFoods.json");
+//            Gson gson = new Gson();
+//            gson.toJson(foods, fileWriterRestaurantFood);
+//            fileWriterRestaurantFood.close();
+//        } catch (IOException e) {
+//            System.out.println("problem in writing");
+//        }
+//    }
+//    public static ArrayList<Food> loadRestaurantFoodFromFile(){
+//        try {
+//            FileReader fileReaderRestaurantFood = null;
+//            fileReaderRestaurantFood = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\restaurantFoods.json");
+//            Type type = new TypeToken<ArrayList<Food>>(){}.getType();
+//            Gson gson = new Gson();
+//            ArrayList<Food> allF = new ArrayList<>();
+//            allF = gson.fromJson(fileReaderRestaurantFood,type);
+//            fileReaderRestaurantFood.close();
+//            foods = new ArrayList<>();
+//            if (allF != null)
+//                foods.addAll(allF);
+//        } catch (IOException e) {
+//            System.out.println("problem in reading");
+//        }
+//        return foods;
+//    }
+//    public static void saveRestaurantFoodTypeToFile(){
+//        try {
+//            FileWriter fileWriterRestaurantFoodType = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\restaurantFoodTypes.json");
+//            Gson gson = new Gson();
+//            gson.toJson(foodTypes, fileWriterRestaurantFoodType);
+//            fileWriterRestaurantFoodType.close();
+//        } catch (IOException e) {
+//            System.out.println("problem in writing");
+//        }
+//    }
+//    public static ArrayList<Integer> loadRestaurantFoodTypeFromFile(){
+//        try {
+//            FileReader fileReaderRestaurantFoodType = null;
+//            fileReaderRestaurantFoodType = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\restaurantFoodTypes.json");
+//            Type type = new TypeToken<ArrayList<Integer>>(){}.getType();
+//            Gson gson = new Gson();
+//            ArrayList<Integer> allF = new ArrayList<>();
+//            allF = gson.fromJson(fileReaderRestaurantFoodType,type);
+//            fileReaderRestaurantFoodType.close();
+//            foodTypes = new ArrayList<>();
+//            if (allF != null)
+//                foodTypes.addAll(allF);
+//        } catch (IOException e) {
+//            System.out.println("problem in reading");
+//        }
+//        return foodTypes;
+//    }
 }

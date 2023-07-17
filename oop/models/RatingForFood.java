@@ -58,7 +58,7 @@ public class RatingForFood {
     }
     public static void saveFoodRatingToFile(){
         try {
-            FileWriter fileWriterFoodRating = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\foodRatings.json");
+            FileWriter fileWriterFoodRating = new FileWriter("oop\\files\\foodRatings.json");
             Gson gson = new Gson();
             gson.toJson(allRatings, fileWriterFoodRating);
             fileWriterFoodRating.close();
@@ -69,7 +69,7 @@ public class RatingForFood {
     public static ArrayList<RatingForFood> loadFoodRatingFromFile(){
         try {
             FileReader fileReaderFoodRating = null;
-            fileReaderFoodRating = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\foodRatings.json");
+            fileReaderFoodRating = new FileReader("oop\\files\\foodRatings.json");
             Type type = new TypeToken<ArrayList<RatingForFood>>(){}.getType();
             Gson gson = new Gson();
             ArrayList<RatingForFood> allR = new ArrayList<>();

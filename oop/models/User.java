@@ -76,7 +76,7 @@ public abstract class User {
     }
     public static void saveUserToFile(){
         try {
-            FileWriter fileWriterCustomer = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\customers.json");
+            FileWriter fileWriterCustomer = new FileWriter("oop\\files\\customers.json");
             Gson gsonCus = new Gson();
             allU = new ArrayList<>();
             for (User allUser : allUsers) {
@@ -85,7 +85,7 @@ public abstract class User {
             }
             gsonCus.toJson(allU, fileWriterCustomer);
             fileWriterCustomer.close();
-            FileWriter fileWriterVendor = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\vendors.json");
+            FileWriter fileWriterVendor = new FileWriter("oop\\files\\vendors.json");
             allU = new ArrayList<>();
             for (User allUser : allUsers) {
                 if (allUser instanceof Vendor)
@@ -101,7 +101,7 @@ public abstract class User {
     public static ArrayList<User> loadUserFromFile(){
         try {
             FileReader fileReaderCustomer = null;
-            fileReaderCustomer = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\customers.json");
+            fileReaderCustomer = new FileReader("oop\\files\\customers.json");
             Type typeCus = new TypeToken<ArrayList<Customer>>(){}.getType();
             Gson gsonCus = new Gson();
             allU = new ArrayList<>();
@@ -111,7 +111,7 @@ public abstract class User {
             if (allU != null)
                 allUsers = (ArrayList<User>) allU.clone();
             FileReader fileReaderVendor = null;
-            fileReaderVendor = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\vendors.json");
+            fileReaderVendor = new FileReader("oop\\files\\vendors.json");
             Type typeVen = new TypeToken<ArrayList<Vendor>>(){}.getType();
             allU = new ArrayList<>();
             Gson gsonVen = new Gson();
