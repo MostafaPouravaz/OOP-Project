@@ -95,7 +95,7 @@ public abstract class User {
             gsonVen.toJson(allU, fileWriterVendor);
             fileWriterVendor.close();
         } catch (IOException e) {
-            System.out.println("problem in writing");
+            System.out.println(" ");
         }
     }
     public static ArrayList<User> loadUserFromFile(){
@@ -121,7 +121,7 @@ public abstract class User {
                 allUsers.addAll(allU);
             id = allUsers.size();
         } catch (IOException e) {
-            System.out.println("problem in reading");
+            System.out.println(" ");
         }
         return allUsers;
     }

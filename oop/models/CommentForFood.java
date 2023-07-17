@@ -85,18 +85,18 @@ public class CommentForFood {
     }
     public static void saveFoodCommentToFile(){
         try {
-            FileWriter fileWriterFoodComment = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\foodComments.json");
+            FileWriter fileWriterFoodComment = new FileWriter("java\\files\\foodComment.json");
             Gson gson = new Gson();
             gson.toJson(allComments, fileWriterFoodComment);
             fileWriterFoodComment.close();
         } catch (IOException e) {
-            System.out.println("problem in writing");
+            System.out.println(" ");
         }
     }
     public static ArrayList<CommentForFood> loadFoodCommentFromFile(){
         try {
             FileReader fileReaderFoodComment = null;
-            fileReaderFoodComment = new FileReader("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\foodComment.json");
+            fileReaderFoodComment = new FileReader("java\\files\\foodComment.json");
             Type type = new TypeToken<ArrayList<CommentForFood>>(){}.getType();
             Gson gson = new Gson();
             ArrayList<CommentForFood> allC = new ArrayList<>();
@@ -107,7 +107,7 @@ public class CommentForFood {
                 allComments.addAll(allC);
             counterID = allComments.size();
         } catch (IOException e) {
-            System.out.println("problem in reading");
+            System.out.println(" ");
         }
         return allComments;
     }

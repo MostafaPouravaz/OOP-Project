@@ -225,7 +225,7 @@ public class Food {
             gson.toJson(allFoods, fileWriterFood);
             fileWriterFood.close();
         } catch (IOException e) {
-            System.out.println("problem in writing");
+            System.out.println(" ");
         }
     }
 
@@ -244,7 +244,7 @@ public class Food {
                 allFoods.addAll(allF);
             IDCounter = allFoods.size();
         } catch (IOException e) {
-            System.out.println("problem in reading");
+            System.out.println(" ");
         }
         return allFoods;
     }
