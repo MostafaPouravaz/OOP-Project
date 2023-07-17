@@ -16,6 +16,7 @@ public class Order {
     private String restaurantName;
     private static ArrayList<Food> orderedFoods = new ArrayList<>();
     private static ArrayList<Order> allOrders = new ArrayList<>(); //History
+
     public ArrayList<Food> getOrderedFoods() {
         if (loadOrderFromFile() != null)
             allOrders = new ArrayList<>(loadOrderFromFile());
@@ -57,9 +58,10 @@ public class Order {
     public static int getCounterID() {
         return counterID;
     }
+
     private int finalPrice = 0;
     //private int offPercent;
-    private static int counterID=0;
+    private static int counterID = 0;
 
     public static ArrayList<Order> getAllOrders() {
         if (loadOrderFromFile() != null)
@@ -74,7 +76,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(Cart cart, int estimatedTime, LocalDateTime startTime, int destinationNode){
+    public Order(Cart cart, int estimatedTime, LocalDateTime startTime, int destinationNode) {
         this.orderedFoods = cart.getChosenFoods();
         for (Food orderedFood : orderedFoods) this.finalPrice += orderedFood.getPrice();
         this.customerID = cart.getCustomerID();
@@ -102,7 +104,8 @@ public class Order {
         isDelivered = delivered;
         saveOrderToFile();
     }
-    public ArrayList<Order> pastOrders(){
+
+    public ArrayList<Order> pastOrders() {
         if (loadOrderFromFile() != null)
             allOrders = new ArrayList<>(loadOrderFromFile());
         ArrayList<Order> pO = new ArrayList<>();
@@ -112,7 +115,8 @@ public class Order {
         }
         return pO;
     }
-    public ArrayList<Order> openOrders(){
+
+    public ArrayList<Order> openOrders() {
         if (loadOrderFromFile() != null)
             allOrders = new ArrayList<>(loadOrderFromFile());
         ArrayList<Order> pO = new ArrayList<>();
@@ -131,13 +135,15 @@ public class Order {
         this.status = status;
         saveOrderToFile();
     }
+
     private void addOrder(Order order) {
         if (loadOrderFromFile() != null)
             allOrders = new ArrayList<>(loadOrderFromFile());
         allOrders.add(order);
         saveOrderToFile();
     }
-    public static void saveOrderToFile(){
+
+    public static void saveOrderToFile() {
         try {
             FileWriter fileWriterOrder = new FileWriter("oop\\files\\orders.json");
             Gson gson = new Gson();
@@ -147,14 +153,16 @@ public class Order {
             System.out.println("problem in writing");
         }
     }
-    public static ArrayList<Order> loadOrderFromFile(){
+
+    public static ArrayList<Order> loadOrderFromFile() {
         try {
             FileReader fileReaderOrder = null;
             fileReaderOrder = new FileReader("oop\\files\\orders.json");
-            Type type = new TypeToken<ArrayList<Order>>(){}.getType();
+            Type type = new TypeToken<ArrayList<Order>>() {
+            }.getType();
             Gson gson = new Gson();
             ArrayList<Order> allO = new ArrayList<>();
-            allO = gson.fromJson(fileReaderOrder,type);
+            allO = gson.fromJson(fileReaderOrder, type);
             fileReaderOrder.close();
             allOrders = new ArrayList<>();
             if (allO != null)
@@ -165,6 +173,7 @@ public class Order {
         }
         return allOrders;
     }
+}
 //    public static void saveOrderFoodsToFile(){
 //        try {
 //            FileWriter fileWriterOrderFoods = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\orderFoods.json");
@@ -192,4 +201,4 @@ public class Order {
 //        }
 //        return orderedFoods;
 //    }
-}
+

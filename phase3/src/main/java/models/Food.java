@@ -1,18 +1,24 @@
 package models;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 //edit setter getter
 //comment
 public class Food {
-    private ArrayList<RatingForFood> ratings = new ArrayList<>();
-    private ArrayList<CommentForFood> comments = new ArrayList<>();
+    private static ArrayList<RatingForFood> allRatings = new ArrayList<>();
+    private static ArrayList<CommentForFood> allComments = new ArrayList<>();
+    private static ArrayList<Food> allFoods = new ArrayList<>();
     private int finalRate;
     private String name;
-    private final static ArrayList<Food> allFoods = new ArrayList<>();
     private int ID;
-    private static int IDCounter=0;
+    private static int IDCounter = 0;
     private int price;
     private int ID_restaurant;
     LocalDateTime startTime;
@@ -22,11 +28,15 @@ public class Food {
     private boolean active = false;
 
     public ArrayList<RatingForFood> getRatings() {
-        return ratings;
+        if (loadFoodFromFile() != null)
+            allFoods = new ArrayList<>(loadFoodFromFile());
+        return allRatings;
     }
 
     public ArrayList<CommentForFood> getComments() {
-        return comments;
+        if (loadFoodFromFile() != null)
+            allFoods = new ArrayList<>(loadFoodFromFile());
+        return allComments;
     }
 
     public static int getIDCounter() {
@@ -46,16 +56,21 @@ public class Food {
     }
 
     public static ArrayList<Food> getAllFoods() {
+        if (loadFoodFromFile() != null)
+            allFoods = new ArrayList<>(loadFoodFromFile());
         return Food.allFoods;
     }
 
     private boolean isDiscounted = false;
-    public void discounter (int timePeriod){
+
+    public void discounter(int timePeriod) {
         this.startTime = LocalDateTime.now();
         this.period = timePeriod * 60;
         this.isDiscounted = true;
+        saveFoodToFile();
     }
-    public boolean discountActive(){
+
+    public boolean discountActive() {
         if (!isDiscounted)
             return false;
         return LocalDateTime.now().isBefore(startTime.plusSeconds(this.period));
@@ -67,6 +82,7 @@ public class Food {
 
     public void setName(String name) {
         this.name = name;
+        saveFoodToFile();
     }
 
     public int getID() {
@@ -75,16 +91,18 @@ public class Food {
 
     public void setID(int ID) {
         this.ID = ID;
+        saveFoodToFile();
     }
 
     public int getPrice() {
         if (discountActive())
-            return price*(100-getDiscount())/100;
+            return price * (100 - getDiscount()) / 100;
         return price;
     }
 
     public void setPrice(int price) {
         this.price = price;
+        saveFoodToFile();
     }
 
     public int getID_restaurant() {
@@ -93,6 +111,7 @@ public class Food {
 
     public void setID_restaurant(int ID_restaurant) {
         this.ID_restaurant = ID_restaurant;
+        saveFoodToFile();
     }
 
     public int getDiscount() {
@@ -101,6 +120,7 @@ public class Food {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+        saveFoodToFile();
     }
 
     public boolean isActive() {
@@ -113,59 +133,119 @@ public class Food {
 
     public void setActive(boolean active) {
         this.active = active;
+        saveFoodToFile();
     }
 
     public int getFinalRate() {
+        if (loadFoodFromFile() != null)
+            allFoods = new ArrayList<>(loadFoodFromFile());
         finalRate = 0;
-        for (RatingForFood rating : ratings) finalRate += rating.getRate();
-        return finalRate/ratings.size();
-    }
-    public void showComments() {
-        for (int i=0; comments.size()>i; i++){
-            System.out.println(i+1 + ". \n" +
-                    Customer.getUserByUserID(comments.get(i).getCustomerID()).getUsername() + " :"
-                    + comments.get(i).getComment());
-            if (comments.get(i).isResponseExists())
-                System.out.println("manager's response : " + comments.get(i).getResponse());
+        if (allRatings == null)
+            return -1;
+        else {
+            for (RatingForFood rating : allRatings) finalRate += rating.getRate();
+            return finalRate / allRatings.size();
         }
     }
-    public void addRate(int customerID, double rate){
-        ratings.add(new RatingForFood(ID, customerID, rate));
+
+    public void showComments() {
+        if (loadFoodFromFile() != null)
+            allFoods = new ArrayList<>(loadFoodFromFile());
+        for (int i = 0; allComments.size() > i; i++) {
+            System.out.println(i + 1 + ". \n" +
+                    Customer.getUserByUserID(allComments.get(i).getCustomerID()).getUsername() + " :"
+                    + allComments.get(i).getComment());
+            if (allComments.get(i).isResponseExists())
+                System.out.println("manager's response : " + allComments.get(i).getResponse());
+        }
     }
-    public void addComment(int customerID, String comment){
-        comments.add(new CommentForFood(ID, customerID, comment));
+
+    public void addRate(int customerID, double rate) {
+        allRatings.add(new RatingForFood(ID, customerID, rate));
+        saveFoodToFile();
     }
+
+    public void addComment(int customerID, String comment) {
+        allComments.add(new CommentForFood(ID, customerID, comment));
+        saveFoodToFile();
+    }
+
     public void editRate(int customerID, double rate) {
-        for (RatingForFood rating : ratings) {
+        for (RatingForFood rating : allRatings) {
             if (rating.getCustomerID() == customerID)
                 rating.editRate(rate);
         }
-        if( RatingForFood.getRatingByFoodIDAndCostumerID(ID,customerID)!=null)
-            RatingForFood.getRatingByFoodIDAndCostumerID(ID,customerID).editRate(rate);
+        if (RatingForFood.getRatingByFoodIDAndCostumerID(ID, customerID) != null)
+            RatingForFood.getRatingByFoodIDAndCostumerID(ID, customerID).editRate(rate);
+        saveFoodToFile();
     }
+
     public void editComment(int customerID, String comment) {
-        for (CommentForFood comment1 : comments) {
+        if (loadFoodFromFile() != null)
+            allFoods = new ArrayList<>(loadFoodFromFile());
+        for (CommentForFood comment1 : allComments) {
             if (comment1.getCustomerID() == customerID) {
                 comment1.editComment(comment);
-                if(CommentForFood.getCommentByFoodIDAndCostumerID(ID, customerID) != null)
+                if (CommentForFood.getCommentByFoodIDAndCostumerID(ID, customerID) != null)
                     CommentForFood.getCommentByFoodIDAndCostumerID(ID, customerID).editComment(comment);
                 break;
             }
         }
     }
+
     public void addOrEditResponse(int commentID, String response) {
-        for (CommentForFood comment1 : comments) {
-            if(comment1.getCommentID()==commentID)
-                comment1.setResponse(commentID , response);
+        for (CommentForFood comment1 : allComments) {
+            if (comment1.getCommentID() == commentID)
+                comment1.setResponse(commentID, response);
         }
+        saveFoodToFile();
     }
+
     public Food(String name, int price, int ID_restaurant, int foodTypeID) {
         this.name = name;
         this.price = price;
         this.ID_restaurant = ID_restaurant;
         this.foodTypeID = foodTypeID;
-        this.active =true;
+        this.active = true;
         this.ID = ++IDCounter;
-        Food.allFoods.add(this);
+        addFood(this);
+    }
+
+    private void addFood(Food food) {
+        if (loadFoodFromFile() != null)
+            allFoods = new ArrayList<>(loadFoodFromFile());
+        allFoods.add(food);
+        saveFoodToFile();
+    }
+
+    public static void saveFoodToFile() {
+        try {
+            FileWriter fileWriterFood = new FileWriter("oop\\files\\foods.json");
+            Gson gson = new Gson();
+            gson.toJson(allFoods, fileWriterFood);
+            fileWriterFood.close();
+        } catch (IOException e) {
+            System.out.println("problem in writing");
+        }
+    }
+
+    public static ArrayList<Food> loadFoodFromFile() {
+        try {
+            FileReader fileReaderFood = null;
+            fileReaderFood = new FileReader("oop\\files\\foods.json");
+            Type type = new TypeToken<ArrayList<Food>>() {
+            }.getType();
+            Gson gson = new Gson();
+            ArrayList<Food> allF = new ArrayList<>();
+            allF = gson.fromJson(fileReaderFood, type);
+            fileReaderFood.close();
+            allFoods = new ArrayList<>();
+            if (allF != null)
+                allFoods.addAll(allF);
+            IDCounter = allFoods.size();
+        } catch (IOException e) {
+            System.out.println("problem in reading");
+        }
+        return allFoods;
     }
 }

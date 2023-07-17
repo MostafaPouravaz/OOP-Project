@@ -26,14 +26,12 @@ public class MainController extends Controller{
 
         return MainController.instance;
     }
-    public ArrayList<Saleable> handleShowProductAndServices() {
-        return Saleable.getAllItems();
-    }
+
     public ArrayList<Restaurant> handleShowRestaurants() {
         return Restaurant.getAllRestaurant();
     }
     public ArrayList<Food> handleShowFoods() {
-        return MainMenu.getCurrentRestaurant().getFood();
+        return MainMenu.getCurrentRestaurant().getFoods();
     }
     public ArrayList<Restaurant> handleSearchRestaurants(String choice) {
         ArrayList <Restaurant> searchedRestaurants = new ArrayList<>();
@@ -45,9 +43,9 @@ public class MainController extends Controller{
 
     public ArrayList<Food> handleSearchFoods(String choice) {
         ArrayList <Food> searchedFoods = new ArrayList<>();
-        for(int i=0 ; i<MainMenu.getCurrentRestaurant().getFood().size() ; i++)
-            if(MainMenu.getCurrentRestaurant().getFood().get(i).getName().contains(choice))
-                searchedFoods.add(MainMenu.getCurrentRestaurant().getFood().get(i));
+        for(int i=0 ; i<MainMenu.getCurrentRestaurant().getFoods().size() ; i++)
+            if(MainMenu.getCurrentRestaurant().getFoods().get(i).getName().contains(choice))
+                searchedFoods.add(MainMenu.getCurrentRestaurant().getFoods().get(i));
         return searchedFoods;
     }
 
@@ -62,25 +60,10 @@ public class MainController extends Controller{
 
     public Food handleChooseFood(String choice) {
         int i = Integer.parseInt(choice.trim())-1;
-        if (i<MainMenu.getCurrentRestaurant().getFood().size())
-            return MainMenu.getCurrentRestaurant().getFood().get(i);
+        if (i<MainMenu.getCurrentRestaurant().getFoods().size())
+            return MainMenu.getCurrentRestaurant().getFoods().get(i);
         else
             return null;
-    }
-
-    public Message handleAddProduct(String name, int price, int capacity, String description) {
-        for (Saleable item : Saleable.getAllItems()) {
-            if (item instanceof Product && item.getName().equals(name) && item.getPrice() == price
-                    && ((Product) item).getCapacity() == capacity
-                    && ((Product) item).getDescription().equals(description)) {
-                return Message.PRODUCT_EXIST;
-            }
-        }
-
-        new Product(name, price, description, capacity);
-
-        return Message.SUCCESS;
-
     }
     public Message handleAddRestaurant(String name, int locationNode) {
         User loggedInUser = Menu.getLoggedInUser();
@@ -90,7 +73,7 @@ public class MainController extends Controller{
     public Message handleAddFood(String name, int price, int foodType) {
         User loggedInUser = Menu.getLoggedInUser();
         Restaurant currentRestaurant = MainMenu.getCurrentRestaurant();
-        MainMenu.setCurrentFood(new Food(name, price, currentRestaurant.getID(), foodType));
+        MainMenu.setCurrentFood(new Food(name, price, currentRestaurant.getRestaurantID(), foodType));
         return Message.SUCCESS;
     }
 

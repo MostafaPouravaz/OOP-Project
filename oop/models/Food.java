@@ -18,7 +18,7 @@ public class Food {
     private int finalRate;
     private String name;
     private int ID;
-    private static int IDCounter=0;
+    private static int IDCounter = 0;
     private int price;
     private int ID_restaurant;
     LocalDateTime startTime;
@@ -62,13 +62,15 @@ public class Food {
     }
 
     private boolean isDiscounted = false;
-    public void discounter (int timePeriod){
+
+    public void discounter(int timePeriod) {
         this.startTime = LocalDateTime.now();
         this.period = timePeriod * 60;
         this.isDiscounted = true;
         saveFoodToFile();
     }
-    public boolean discountActive(){
+
+    public boolean discountActive() {
         if (!isDiscounted)
             return false;
         return LocalDateTime.now().isBefore(startTime.plusSeconds(this.period));
@@ -94,7 +96,7 @@ public class Food {
 
     public int getPrice() {
         if (discountActive())
-            return price*(100-getDiscount())/100;
+            return price * (100 - getDiscount()) / 100;
         return price;
     }
 
@@ -142,72 +144,81 @@ public class Food {
             return -1;
         else {
             for (RatingForFood rating : allRatings) finalRate += rating.getRate();
-            return finalRate/ allRatings.size();
+            return finalRate / allRatings.size();
         }
     }
+
     public void showComments() {
         if (loadFoodFromFile() != null)
             allFoods = new ArrayList<>(loadFoodFromFile());
-        for (int i = 0; allComments.size()>i; i++){
-            System.out.println(i+1 + ". \n" +
+        for (int i = 0; allComments.size() > i; i++) {
+            System.out.println(i + 1 + ". \n" +
                     Customer.getUserByUserID(allComments.get(i).getCustomerID()).getUsername() + " :"
                     + allComments.get(i).getComment());
             if (allComments.get(i).isResponseExists())
                 System.out.println("manager's response : " + allComments.get(i).getResponse());
         }
     }
-    public void addRate(int customerID, double rate){
+
+    public void addRate(int customerID, double rate) {
         allRatings.add(new RatingForFood(ID, customerID, rate));
         saveFoodToFile();
     }
-    public void addComment(int customerID, String comment){
+
+    public void addComment(int customerID, String comment) {
         allComments.add(new CommentForFood(ID, customerID, comment));
         saveFoodToFile();
     }
+
     public void editRate(int customerID, double rate) {
         for (RatingForFood rating : allRatings) {
             if (rating.getCustomerID() == customerID)
                 rating.editRate(rate);
         }
-        if( RatingForFood.getRatingByFoodIDAndCostumerID(ID,customerID)!=null)
-            RatingForFood.getRatingByFoodIDAndCostumerID(ID,customerID).editRate(rate);
+        if (RatingForFood.getRatingByFoodIDAndCostumerID(ID, customerID) != null)
+            RatingForFood.getRatingByFoodIDAndCostumerID(ID, customerID).editRate(rate);
         saveFoodToFile();
     }
+
     public void editComment(int customerID, String comment) {
         if (loadFoodFromFile() != null)
             allFoods = new ArrayList<>(loadFoodFromFile());
         for (CommentForFood comment1 : allComments) {
             if (comment1.getCustomerID() == customerID) {
                 comment1.editComment(comment);
-                if(CommentForFood.getCommentByFoodIDAndCostumerID(ID, customerID) != null)
+                if (CommentForFood.getCommentByFoodIDAndCostumerID(ID, customerID) != null)
                     CommentForFood.getCommentByFoodIDAndCostumerID(ID, customerID).editComment(comment);
                 break;
             }
         }
     }
+
     public void addOrEditResponse(int commentID, String response) {
         for (CommentForFood comment1 : allComments) {
-            if(comment1.getCommentID()==commentID)
-                comment1.setResponse(commentID , response);
+            if (comment1.getCommentID() == commentID)
+                comment1.setResponse(commentID, response);
         }
         saveFoodToFile();
     }
+
     public Food(String name, int price, int ID_restaurant, int foodTypeID) {
         this.name = name;
         this.price = price;
         this.ID_restaurant = ID_restaurant;
         this.foodTypeID = foodTypeID;
-        this.active =true;
+        this.active = true;
         this.ID = ++IDCounter;
         addFood(this);
     }
+
     private void addFood(Food food) {
         if (loadFoodFromFile() != null)
             allFoods = new ArrayList<>(loadFoodFromFile());
         allFoods.add(food);
         saveFoodToFile();
     }
-    public static void saveFoodToFile(){
+
+    public static void saveFoodToFile() {
         try {
             FileWriter fileWriterFood = new FileWriter("oop\\files\\foods.json");
             Gson gson = new Gson();
@@ -217,14 +228,16 @@ public class Food {
             System.out.println("problem in writing");
         }
     }
-    public static ArrayList<Food> loadFoodFromFile(){
+
+    public static ArrayList<Food> loadFoodFromFile() {
         try {
             FileReader fileReaderFood = null;
             fileReaderFood = new FileReader("oop\\files\\foods.json");
-            Type type = new TypeToken<ArrayList<Food>>(){}.getType();
+            Type type = new TypeToken<ArrayList<Food>>() {
+            }.getType();
             Gson gson = new Gson();
             ArrayList<Food> allF = new ArrayList<>();
-            allF = gson.fromJson(fileReaderFood,type);
+            allF = gson.fromJson(fileReaderFood, type);
             fileReaderFood.close();
             allFoods = new ArrayList<>();
             if (allF != null)
@@ -235,6 +248,8 @@ public class Food {
         }
         return allFoods;
     }
+}
+
 //    public static void saveRatingForFoodToFile(){
 //        try {
 //            FileWriter fileWriterRatingForFood = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\ratingForFood.json");
@@ -289,4 +304,4 @@ public class Food {
 //        }
 //        return allComments;
 //    }
-}
+

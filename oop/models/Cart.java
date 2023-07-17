@@ -16,44 +16,53 @@ public class Cart {
 
     private int customerID;
     private int restaurantID;
+
     public Cart(int customerID, int restaurantID) {
         this.customerID = customerID;
         this.restaurantID = restaurantID;
         addCart(this);
     }
-    public void addFood(Food chosenFood){
+
+    public void addFood(Food chosenFood) {
         this.chosenFoods.add(chosenFood);
         System.out.println(Message.SUCCESS);
         saveCartToFile();
     }
-    public void deleteFood(Food chosenFood){
+
+    public void deleteFood(Food chosenFood) {
         chosenFoods.remove(chosenFood);
         System.out.println(Message.SUCCESS);
         saveCartToFile();
     }
+
     public ArrayList<Food> getChosenFoods() {
         if (loadCartFromFile() != null)
             allPersonCart = new ArrayList<>(loadCartFromFile());
         return chosenFoods;
     }
+
     public int getCustomerID() {
         return customerID;
     }
+
     public int getRestaurantID() {
         return restaurantID;
     }
+
     public static ArrayList<Cart> getAllPersonCart() {
         if (loadCartFromFile() != null)
             allPersonCart = new ArrayList<>(loadCartFromFile());
         return Cart.allPersonCart;
     }
+
     private void addCart(Cart cart) {
         if (loadCartFromFile() != null)
             allPersonCart = new ArrayList<>(loadCartFromFile());
         allPersonCart.add(cart);
         saveCartToFile();
     }
-    public static void saveCartToFile(){
+
+    public static void saveCartToFile() {
         try {
             FileWriter fileWriterCart = new FileWriter("oop\\files\\carts.json");
             Gson gson = new Gson();
@@ -63,14 +72,16 @@ public class Cart {
             System.out.println("problem in writing");
         }
     }
-    public static ArrayList<Cart> loadCartFromFile(){
+
+    public static ArrayList<Cart> loadCartFromFile() {
         try {
             FileReader fileReaderCart = null;
             fileReaderCart = new FileReader("oop\\files\\carts.json");
-            Type type = new TypeToken<ArrayList<Cart>>(){}.getType();
+            Type type = new TypeToken<ArrayList<Cart>>() {
+            }.getType();
             Gson gson = new Gson();
             ArrayList<Cart> allC = new ArrayList<>();
-            allC = gson.fromJson(fileReaderCart,type);
+            allC = gson.fromJson(fileReaderCart, type);
             fileReaderCart.close();
             allPersonCart = new ArrayList<>();
             if (allC != null)
@@ -80,6 +91,7 @@ public class Cart {
         }
         return allPersonCart;
     }
+}
 //    public static void saveChosenFoodsToFile(){
 //        try {
 //            FileWriter fileWriterChosenFoods = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\chosenFoods.json");
@@ -107,5 +119,3 @@ public class Cart {
 //        }
 //        return chosenFoods;
 //    }
-
-}

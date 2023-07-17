@@ -85,3 +85,4 @@ public class RatingForRestaurant {
         return allRatings;
     }
 }
+

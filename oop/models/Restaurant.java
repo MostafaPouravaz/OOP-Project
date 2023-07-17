@@ -20,7 +20,7 @@ public class Restaurant {
     private static ArrayList<Integer> foodTypes = new ArrayList<>();
     private static ArrayList<Food> foods = new ArrayList<>();
     private String name;
-    static int ID_Counter=0;
+    static int ID_Counter = 0;
     private int RestaurantID;
     private int finalRate;
 
@@ -29,18 +29,20 @@ public class Restaurant {
 
 
     public Restaurant(String name, int ID_Owner, int locationNode) {
-        RestaurantID =++ID_Counter;
+        RestaurantID = ++ID_Counter;
         this.name = name;
         this.ID_Owner = ID_Owner;
         this.locationNode = locationNode;
         addRestaurant(this);
     }
+
     private void addRestaurant(Restaurant restaurant) {
         if (loadRestaurantFromFile() != null)
             allRestaurant = new ArrayList<>(loadRestaurantFromFile());
         allRestaurant.add(restaurant);
         saveRestaurantToFile();
     }
+
     public String getName() {
         return name;
     }
@@ -91,8 +93,9 @@ public class Restaurant {
         foodTypes.add(ID);
         saveRestaurantToFile();
     }
+
     public void editFoodType(int ID, FoodType foodType) {
-        foodTypes.set(ID,FoodType.getIntFromFoodType(foodType));
+        foodTypes.set(ID, FoodType.getIntFromFoodType(foodType));
         saveRestaurantToFile();
     }
 
@@ -118,11 +121,13 @@ public class Restaurant {
         this.foods.add(foods);
         saveRestaurantToFile();
     }
+
     public static ArrayList<Restaurant> getAllRestaurant() {
         if (loadRestaurantFromFile() != null)
             allRestaurant = new ArrayList<>(loadRestaurantFromFile());
         return Restaurant.allRestaurant;
     }
+
     public static ArrayList<Restaurant> getVendorsRestaurant(int vendorID) {
         if (loadRestaurantFromFile() != null)
             allRestaurant = new ArrayList<>(loadRestaurantFromFile());
@@ -148,42 +153,46 @@ public class Restaurant {
     public static Restaurant getRestaurantByRestaurantID(int ID) {
         if (loadRestaurantFromFile() != null)
             allRestaurant = new ArrayList<>(loadRestaurantFromFile());
-        if(ID<=allRestaurant.size())
-            return allRestaurant.get(ID-1);
+        if (ID <= allRestaurant.size())
+            return allRestaurant.get(ID - 1);
         return null;
     }
 
     public void showComments() {
         if (loadRestaurantFromFile() != null)
             allRestaurant = new ArrayList<>(loadRestaurantFromFile());
-        for (int i = 0; allComments.size()>i; i++){
-            System.out.println(i+1 + ". \n" +
+        for (int i = 0; allComments.size() > i; i++) {
+            System.out.println(i + 1 + ". \n" +
                     Customer.getUserByUserID(allComments.get(i).getCustomerID()).getUsername() + " :"
                     + allComments.get(i).getComment());
             if (allComments.get(i).isResponseExists())
                 System.out.println("manager's response : " + allComments.get(i).getResponse());
         }
     }
-    public void addComment(int customerID, String comment){
+
+    public void addComment(int customerID, String comment) {
         allComments.add(new CommentForRestaurant(RestaurantID, customerID, comment));
         saveRestaurantToFile();
     }
+
     public void editComment(int customerID, String comment) {
         for (CommentForRestaurant comment1 : allComments) {
             if (comment1.getCustomerID() == customerID)
                 comment1.editComment(comment);
         }
-        if(CommentForRestaurant.getCommentByRestaurantIDAndCostumerID(RestaurantID,customerID) != null)
+        if (CommentForRestaurant.getCommentByRestaurantIDAndCostumerID(RestaurantID, customerID) != null)
             CommentForRestaurant.getCommentByRestaurantIDAndCostumerID(RestaurantID, customerID).editComment(comment);
         saveRestaurantToFile();
     }
+
     public void addOrEditResponse(int commentID, String response) {
         for (CommentForRestaurant comment1 : allComments) {
-            if(comment1.getCommentID()==commentID)
-                comment1.setResponse(commentID , response);
+            if (comment1.getCommentID() == commentID)
+                comment1.setResponse(commentID, response);
         }
         saveRestaurantToFile();
     }
+
     public int getFinalRate() {
         if (loadRestaurantFromFile() != null)
             allRestaurant = new ArrayList<>(loadRestaurantFromFile());
@@ -191,23 +200,25 @@ public class Restaurant {
         if (allRatings == null)
             return -1;
         for (RatingForRestaurant rating : allRatings) finalRate += rating.getRate();
-        return finalRate/ allRatings.size();
+        return finalRate / allRatings.size();
     }
 
-    public void addRate(int customerID, double rate){
+    public void addRate(int customerID, double rate) {
         allRatings.add(new RatingForRestaurant(RestaurantID, customerID, rate));
         saveRestaurantToFile();
     }
+
     public void editRate(int customerID, double rate) {
         for (RatingForRestaurant rating : allRatings) {
             if (rating.getCustomerID() == customerID)
                 rating.editRate(rate);
         }
-        if(RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(RestaurantID,customerID) != null)
-            RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(RestaurantID,customerID).editRate(rate);
+        if (RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(RestaurantID, customerID) != null)
+            RatingForRestaurant.getRatingByRestaurantIDAndCostumerID(RestaurantID, customerID).editRate(rate);
         saveRestaurantToFile();
     }
-    public static void saveRestaurantToFile(){
+
+    public static void saveRestaurantToFile() {
         try {
             FileWriter fileWriterRestaurant = new FileWriter("oop\\files\\restaurants.json");
             Gson gson = new Gson();
@@ -217,14 +228,16 @@ public class Restaurant {
             System.out.println("problem in writing");
         }
     }
-    public static ArrayList<Restaurant> loadRestaurantFromFile(){
+
+    public static ArrayList<Restaurant> loadRestaurantFromFile() {
         try {
             FileReader fileReaderRestaurant = null;
             fileReaderRestaurant = new FileReader("oop\\files\\restaurants.json");
-            Type type = new TypeToken<ArrayList<Restaurant>>(){}.getType();
+            Type type = new TypeToken<ArrayList<Restaurant>>() {
+            }.getType();
             Gson gson = new Gson();
             ArrayList<Restaurant> allR = new ArrayList<>();
-            allR = gson.fromJson(fileReaderRestaurant,type);
+            allR = gson.fromJson(fileReaderRestaurant, type);
             fileReaderRestaurant.close();
             allRestaurant = new ArrayList<>();
             if (allR != null)
@@ -235,6 +248,8 @@ public class Restaurant {
         }
         return allRestaurant;
     }
+}
+
 //    public static void saveRatingForRestaurantToFile(){
 //        try {
 //            FileWriter fileWriterRatingForRestaurant = new FileWriter("C:\\Users\\Mostafa\\IdeaProjects\\OOP-Project1\\oop\\files\\ratingForRestaurant.json");
@@ -343,4 +358,4 @@ public class Restaurant {
 //        }
 //        return foodTypes;
 //    }
-}
+

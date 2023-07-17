@@ -875,7 +875,7 @@ public class HelloApplication {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-    public static void showRestaurantOptions(){
+    public static void  showRestaurantOptions(){
         JLabel titleLabel = new JLabel("Choose one of the options :");
         JButton backButton = new JButton("Back");
         JButton showLocationButton = new JButton("location");
@@ -1683,8 +1683,8 @@ public class HelloApplication {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ArrayList<String> foodTypesName = new ArrayList<>();
-        for(int i=0 ; i<MainMenu.getCurrentRestaurant().getFoodType().size() ; i++)
-            foodTypesName.add(FoodType.getFoodTypeNameWithFromInt(MainMenu.getCurrentRestaurant().getFoodType().get(i)));
+        for(int i=0 ; i<MainMenu.getCurrentRestaurant().getFoodTypes().size() ; i++)
+            foodTypesName.add(FoodType.getFoodTypeNameWithFromInt(MainMenu.getCurrentRestaurant().getFoodTypes().get(i)));
 
         String[] array = foodTypesName.toArray(new String[foodTypesName.size()]);
 
@@ -2346,8 +2346,8 @@ public class HelloApplication {
 
         ArrayList<String> foodTypeName = new ArrayList<>();
 
-        for(int i=0 ; i<MainMenu.getCurrentRestaurant().getFoodType().size() ; i++)
-            foodTypeName.add(FoodType.getFoodTypeNameWithFromInt(MainMenu.getCurrentRestaurant().getFoodType().get(i)));
+        for(int i=0 ; i<MainMenu.getCurrentRestaurant().getFoodTypes().size() ; i++)
+            foodTypeName.add(FoodType.getFoodTypeNameWithFromInt(MainMenu.getCurrentRestaurant().getFoodTypes().get(i)));
 
         String[] array = foodTypeName.toArray(new String[foodTypeName.size()]);
 
