@@ -1,7 +1,11 @@
 package models;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -146,7 +150,19 @@ public class Order {
     public static void saveOrderToFile() {
         try {
             FileWriter fileWriterOrder = new FileWriter("oop\\files\\orders.json");
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+                @Override
+                public void write(JsonWriter jsonWriter, LocalDateTime localDate) throws IOException{
+                    if (localDate == null)
+                        jsonWriter.value(LocalDateTime.now().toString());
+                    else
+                        jsonWriter.value(localDate.toString());
+                }
+                @Override
+                public LocalDateTime read(JsonReader jsonReader)throws IOException{
+                    return LocalDateTime.parse(jsonReader.nextString());
+                }
+            }).create();
             gson.toJson(allOrders, fileWriterOrder);
             fileWriterOrder.close();
         } catch (IOException e) {
@@ -158,9 +174,17 @@ public class Order {
         try {
             FileReader fileReaderOrder = null;
             fileReaderOrder = new FileReader("oop\\files\\orders.json");
-            Type type = new TypeToken<ArrayList<Order>>() {
-            }.getType();
-            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<Order>>() {}.getType();
+            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+                @Override
+                public void write(JsonWriter jsonWriter, LocalDateTime localDate) throws IOException{
+                    jsonWriter.value(localDate.toString());
+                }
+                @Override
+                public LocalDateTime read(JsonReader jsonReader)throws IOException{
+                    return LocalDateTime.parse(jsonReader.nextString());
+                }
+            }).create();
             ArrayList<Order> allO = new ArrayList<>();
             allO = gson.fromJson(fileReaderOrder, type);
             fileReaderOrder.close();
