@@ -18,4 +18,5 @@ public class Main {
         new File("oop\\\\files\\\\restaurantRatings.json");
         RegisterMenu registerMenu = RegisterMenu.getInstance();
         registerMenu.run();
-    }}
+    }
+}
