@@ -9,16 +9,8 @@ public class Main {
         new File("oop\\\\files\\\\vendors.json");
         new File("oop\\\\files\\\\customers.json");
         new File("oop\\\\files\\\\restaurants.json");
-//        new File("oop\\\\files\\\\ratingForRestaurant.json");
-//        new File("oop\\\\files\\\\commentForRestaurant.json");
-//        new File("oop\\\\files\\\\restaurantFoods.json");
-//        new File("oop\\\\files\\\\restaurantFoodTypes.json");
         new File("oop\\\\files\\\\foods.json");
-//        new File("oop\\\\files\\\\ratingForFood.json");
-//        new File("oop\\\\files\\\\commentForFood.json");
         new File("oop\\\\files\\\\orders.json");
-//        new File("oop\\\\files\\\\orderFoods.json");
-//        new File("oop\\\\files\\\\chosenFoods.json");
         new File("oop\\\\files\\\\carts.json");
         new File("oop\\\\files\\\\foodComment.json");
         new File("oop\\\\files\\\\restaurantComments.json");

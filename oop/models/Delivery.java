@@ -1,6 +1,8 @@
 package models;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,5 +31,24 @@ public class Delivery {
         return map.getShortestDistance(source,destination);
     }
 
+    public String getShortestPath(){
+        return map.getShortestPath(source,destination);
+    }
+
+    public int whereIsNowDelivery(LocalDateTime startTime , LocalDateTime nowTime , int estimatedTime){
+        Duration duration = Duration.between(startTime , nowTime);
+        int passedTime = (int) duration.getSeconds();
+        long w = this.shortestDistinction() * passedTime/estimatedTime ;
+        int sum = 0 ;
+        for(int i=0 ; i< this.shortestPath().size() ; i++){
+            sum += Integer.parseInt(this.shortestPath().get(i));
+           if(w < sum){
+                return i-1 ;
+            }
+            else if(w == sum)
+                return i ;
+        }
+        return 0;
+    }
 
 }
