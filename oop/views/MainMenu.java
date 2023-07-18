@@ -21,6 +21,12 @@ public class MainMenu extends Menu{
     private static Cart currentCart = null;
     private static Order currentOrder = new Order();
 
+    public static Delivery getCurrentDelivery() {
+        return currentDelivery;
+    }
+
+    private static Delivery currentDelivery = null;
+
     public static Restaurant getCurrentRestaurant() {
         return MainMenu.currentRestaurant;
     }
@@ -1026,7 +1032,7 @@ public class MainMenu extends Menu{
 
                 String choice = this.getChoice();
                 int destination = Integer.parseInt(choice);
-                Delivery currentDelivery = new Delivery(currentRestaurant.getLocationNode(), destination);
+                currentDelivery = new Delivery(currentRestaurant.getLocationNode(), destination);
 
                 isDelivery = true;
                 period = (int) (currentDelivery.shortestDistinction() * 10);
@@ -1049,13 +1055,18 @@ public class MainMenu extends Menu{
             isDelivery = false;
             period = 0;
             startTime = null;
+            currentDelivery = null;
+            currentOrder = null ;
         }
         if(this.haveDelivery()) {
             System.out.println("you have no any orders .");
             this.run();
         }else {
+            System.out.println("the delivery path : ");
+            System.out.println(currentDelivery.getShortestPath());
             System.out.println("the estimated delivery time is : ");
             System.out.println(startTime.plusSeconds(currentOrder.getEstimatedTime()));
+            System.out.println("now delivery is in " + currentDelivery.whereIsNowDelivery(startTime , LocalDateTime.now() , period) + "st node");
             this.run();
         }
     }

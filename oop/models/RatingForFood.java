@@ -63,7 +63,7 @@ public class RatingForFood {
             gson.toJson(allRatings, fileWriterFoodRating);
             fileWriterFoodRating.close();
         } catch (IOException e) {
-            System.out.println("problem in writing");
+            System.out.println(" ");
         }
     }
     public static ArrayList<RatingForFood> loadFoodRatingFromFile(){
@@ -80,7 +80,7 @@ public class RatingForFood {
                 allRatings.addAll(allR);
             counterID = allRatings.size();
         } catch (IOException e) {
-            System.out.println("problem in reading");
+            System.out.println(" ");
         }
         return allRatings;
     }

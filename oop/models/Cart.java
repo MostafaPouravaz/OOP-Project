@@ -69,7 +69,7 @@ public class Cart {
             gson.toJson(allPersonCart, fileWriterCart);
             fileWriterCart.close();
         } catch (IOException e) {
-            System.out.println("problem in writing");
+            System.out.println(" ");
         }
     }
 
@@ -87,7 +87,7 @@ public class Cart {
             if (allC != null)
                 allPersonCart.addAll(allC);
         } catch (IOException e) {
-            System.out.println("problem in reading");
+            System.out.println(" ");
         }
         return allPersonCart;
     }

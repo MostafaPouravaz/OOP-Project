@@ -150,7 +150,7 @@ public class Order {
             gson.toJson(allOrders, fileWriterOrder);
             fileWriterOrder.close();
         } catch (IOException e) {
-            System.out.println("problem in writing");
+            System.out.println(" ");
         }
     }
 
@@ -169,7 +169,7 @@ public class Order {
                 allOrders.addAll(allO);
             counterID = allOrders.size();
         } catch (IOException e) {
-            System.out.println("problem in reading");
+            System.out.println(" ");
         }
         return allOrders;
     }
