@@ -1,19 +1,12 @@
 package models;
 
 public class Customer extends User {
-    private int charge ;
+
     public Customer(String username, String password, String animalName) {
         super(username, password, animalName);
-        this.charge = 0;
     }
 
-    public int getCharge() {
-        return this.charge;
-    }
 
-    public void setCharge(int charge) {
-        this.charge += charge;
-    }
 
     @Override
     public String toString() {

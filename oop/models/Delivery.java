@@ -15,7 +15,7 @@ public class Delivery {
 
     private int source;
     private int destination;
-    private final Map map = new Map("E:\\graph.txt");
+    private final Map map = new Map("F:\\graph.txt");
     public ArrayList<String> shortestPath(){
         return new ArrayList<>(List.of(map.getShortestPath(source, destination).split(" -> ")));
     }
@@ -38,15 +38,15 @@ public class Delivery {
     public int whereIsNowDelivery(LocalDateTime startTime , LocalDateTime nowTime , int estimatedTime){
         Duration duration = Duration.between(startTime , nowTime);
         int passedTime = (int) duration.getSeconds();
-        long w = this.shortestDistinction() * passedTime/estimatedTime ;
+        long w = (long) ((this.shortestDistinction()) * ((double) passedTime / estimatedTime));
         int sum = 0 ;
         for(int i=0 ; i< this.shortestPath().size() ; i++){
             sum += Integer.parseInt(this.shortestPath().get(i));
-           if(w < sum){
-                return i-1 ;
+           if(w < sum && w!=0){
+                return Integer.parseInt(shortestPath().get(i))-1 ;
             }
-            else if(w == sum)
-                return i ;
+            else if(w == sum || w ==0 )
+                return Integer.parseInt(shortestPath().get(i)) ;
         }
         return 0;
     }

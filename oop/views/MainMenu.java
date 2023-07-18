@@ -110,6 +110,7 @@ public class MainMenu extends Menu{
 
     @Override
     public void run() {
+
         this.showOptions();
 
         String choice = this.getChoice();
@@ -1021,7 +1022,7 @@ public class MainMenu extends Menu{
     }
 
     private void handleConfirmOrderForCustomer() throws IOException {
-        if(haveDelivery() && isDelivery){
+        if(!haveDelivery() && isDelivery){
             isDelivery = false;
             period = 0;
             startTime = null;
@@ -1029,22 +1030,29 @@ public class MainMenu extends Menu{
         if(currentCart.getChosenFoods().size()==0 || currentCart==null)
             System.out.println("please choose food first ");
         else {
-            Customer loggedInUser = (Customer) Menu.getLoggedInUser();
+            User loggedInUser = Menu.getLoggedInUser();
+
+            System.out.println("where is your address ? (number of node) :");
+
+            String choice = this.getChoice();
+            int destination = Integer.parseInt(choice);
+            currentDelivery = new Delivery(currentRestaurant.getLocationNode(), destination);
+
+            isDelivery = true;
+            period = (int) (currentDelivery.shortestDistinction() * 2);
+            this.timer(period);
+            currentOrder = new Order(currentCart,period,LocalDateTime.now(),destination);
             if(currentOrder.getFinalPrice()>=loggedInUser.getCharge()) {
+                isDelivery = false;
+                period = 0;
+                startTime = null;
+                currentDelivery = null;
+                Order.getAllOrders().remove(Order.getAllOrders().size()-1);
+                currentOrder = null ;
                 System.out.println("please charge your account first");
                 this.run();
             }
             else {
-                System.out.println("where is your address ? (number of node) :");
-
-                String choice = this.getChoice();
-                int destination = Integer.parseInt(choice);
-                currentDelivery = new Delivery(currentRestaurant.getLocationNode(), destination);
-
-                isDelivery = true;
-                period = (int) (currentDelivery.shortestDistinction() * 10);
-                this.timer(period);
-                currentOrder = new Order(currentCart,period,LocalDateTime.now(),destination);
                 currentCart = null;
                 System.out.println(Message.SUCCESS + "\n0. back\n1. show estimated delivery time");
 
@@ -1068,9 +1076,9 @@ public class MainMenu extends Menu{
         int other = 0;
 
         ArrayList<Order> orders = Order.getOrdersWithCustomerID(loggedInUser.getUserId());
-        for (int i=0 ; i< orders.size() ; i++)
-            for (int j=0 ; j<orders.get(i).getOrderedFoods().size() ; j++)
-                switch (orders.get(i).getOrderedFoods().get(j).getFoodTypeID()) {
+        for (Order order : orders)
+            for (int j = 0; j < order.getOrderedFoods().size(); j++)
+                switch (order.getOrderedFoods().get(j).getFoodTypeID()) {
                     case 1 -> fastFood++;
                     case 2 -> iranianFood++;
                     case 3 -> seaFood++;
@@ -1113,19 +1121,19 @@ public class MainMenu extends Menu{
         }
     }
     private void handleShowEstimatedDeliveryTime(){
-        if(haveDelivery() && isDelivery){
+        if(!this.haveDelivery()) {
+            System.out.println("you have no any orders .");
             isDelivery = false;
             period = 0;
             startTime = null;
             currentDelivery = null;
             currentOrder = null ;
-        }
-        if(this.haveDelivery()) {
-            System.out.println("you have no any orders .");
             this.run();
         }else {
             System.out.println("the delivery path : ");
             System.out.println(currentDelivery.getShortestPath());
+            System.out.println("ordered at : ");
+            System.out.println(startTime);
             System.out.println("the estimated delivery time is : ");
             System.out.println(startTime.plusSeconds(currentOrder.getEstimatedTime()));
             System.out.println("now delivery is in " + currentDelivery.whereIsNowDelivery(startTime , LocalDateTime.now() , period) + "st node");
@@ -1138,7 +1146,7 @@ public class MainMenu extends Menu{
     }
     public boolean haveDelivery(){
         if (!isDelivery)
-            return true;
+            return false;
         return LocalDateTime.now().isBefore(startTime.plusSeconds(period));
     }
 
@@ -1148,9 +1156,9 @@ public class MainMenu extends Menu{
         String choice = this.getChoice();
 
         int charge = Integer.parseInt(choice);
-        User loggedInUser = Menu.getLoggedInUser();
 
-        Customer user = (Customer) User.getUserByUserID(loggedInUser.getUserId());
+        User user = Menu.getLoggedInUser();
+
         if (user != null) {
             user.setCharge(charge);
         }
@@ -1160,9 +1168,8 @@ public class MainMenu extends Menu{
     }
 
     private void handleDisplayAccountChargeForCustomer(){
-        User loggedInUser = Menu.getLoggedInUser();
+        User user = Menu.getLoggedInUser();
 
-        Customer user = (Customer) User.getUserByUserID(loggedInUser.getUserId());
         int charge = user != null ? user.getCharge() : 0;
         System.out.println("0. back");
         System.out.println("The charge of account : "+charge + " $" );

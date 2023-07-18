@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public abstract class User {
     private static ArrayList<User> allUsers = new ArrayList<>();
     private static ArrayList<User> allU = new ArrayList<>();
+    private int charge ;
     private static int id = 0;
 
     private final int userId;
@@ -24,9 +25,17 @@ public abstract class User {
         this.username = username;
         this.password = password;
         this.animalName = animalName;
+        this.charge = 0;
         addUser(this);
     }
 
+    public int getCharge() {
+        return this.charge;
+    }
+
+    public void setCharge(int charge) {
+        this.charge += charge;
+    }
     private void addUser(User user) {
         if (loadUserFromFile() != null)
             allUsers = new ArrayList<>(loadUserFromFile());
