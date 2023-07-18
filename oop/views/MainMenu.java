@@ -276,7 +276,7 @@ public class MainMenu extends Menu{
             case "8" -> this.openOrders();
             case "9" -> this.menu();
             case "10" -> this.run();
-            default -> System.out.println(Message.INVALID_CHOICE);
+            default -> {System.out.println(Message.INVALID_CHOICE); showVendorOptions();}
         }
     }
 
@@ -473,10 +473,11 @@ public class MainMenu extends Menu{
                 if (getCurrentRestaurant().getFoods().get(i).discountActive())
                     System.out.print(" | discountActive : YES" + " | discount percent :" + getCurrentRestaurant().getFoods().get(i).getDiscount()+"%");
                 else System.out.print(" | discountActive: NO");
+                System.out.println();
             }
-            System.out.println("\n" + (getCurrentRestaurant().getFoods().size()+1)+". add food\n" +(getCurrentRestaurant().getFoods().size()+2) +". back\nchoose one");
+            System.out.println((getCurrentRestaurant().getFoods().size()+1)+". add food\n" +(getCurrentRestaurant().getFoods().size()+2) +". back\nchoose one");
             int j= Integer.parseInt(this.getChoice())-1;
-            if (j>getCurrentRestaurant().getFoods().size()) {
+            if (j>getCurrentRestaurant().getFoods().size()+1) {
                 System.out.println(Message.INVALID_CHOICE);
                 menu();
             }else if (j==getCurrentRestaurant().getFoods().size())

@@ -1,7 +1,11 @@
 package models;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -12,6 +16,7 @@ import java.util.ArrayList;
 //edit setter getter
 //comment
 public class Food {
+
     private static ArrayList<RatingForFood> allRatings = new ArrayList<>();
     private static ArrayList<CommentForFood> allComments = new ArrayList<>();
     private static ArrayList<Food> allFoods = new ArrayList<>();
@@ -26,7 +31,15 @@ public class Food {
     int foodTypeID;
     private int discount;
     private boolean active = false;
-
+    public Food(String name, int price, int ID_restaurant, int foodTypeID) {
+        this.name = name;
+        this.price = price;
+        this.ID_restaurant = ID_restaurant;
+        this.foodTypeID = foodTypeID;
+        this.active = true;
+        this.ID = ++IDCounter;
+        addFood(this);
+    }
     public ArrayList<RatingForFood> getRatings() {
         if (loadFoodFromFile() != null)
             allFoods = new ArrayList<>(loadFoodFromFile());
@@ -201,16 +214,6 @@ public class Food {
         saveFoodToFile();
     }
 
-    public Food(String name, int price, int ID_restaurant, int foodTypeID) {
-        this.name = name;
-        this.price = price;
-        this.ID_restaurant = ID_restaurant;
-        this.foodTypeID = foodTypeID;
-        this.active = true;
-        this.ID = ++IDCounter;
-        addFood(this);
-    }
-
     private void addFood(Food food) {
         if (loadFoodFromFile() != null)
             allFoods = new ArrayList<>(loadFoodFromFile());
@@ -221,7 +224,19 @@ public class Food {
     public static void saveFoodToFile() {
         try {
             FileWriter fileWriterFood = new FileWriter("oop\\files\\foods.json");
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+                @Override
+                public void write(JsonWriter jsonWriter, LocalDateTime localDate) throws IOException{
+                    if (localDate == null)
+                        jsonWriter.value(LocalDateTime.now().toString());
+                    else
+                        jsonWriter.value(localDate.toString());
+                }
+                @Override
+                public LocalDateTime read(JsonReader jsonReader)throws IOException{
+                    return LocalDateTime.parse(jsonReader.nextString());
+                }
+            }).create();
             gson.toJson(allFoods, fileWriterFood);
             fileWriterFood.close();
         } catch (IOException e) {
@@ -235,7 +250,16 @@ public class Food {
             fileReaderFood = new FileReader("oop\\files\\foods.json");
             Type type = new TypeToken<ArrayList<Food>>() {
             }.getType();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+                @Override
+                public void write(JsonWriter jsonWriter, LocalDateTime localDate) throws IOException{
+                    jsonWriter.value(localDate.toString());
+                }
+                @Override
+                public LocalDateTime read(JsonReader jsonReader)throws IOException{
+                    return LocalDateTime.parse(jsonReader.nextString());
+                }
+            }).create();
             ArrayList<Food> allF = new ArrayList<>();
             allF = gson.fromJson(fileReaderFood, type);
             fileReaderFood.close();
