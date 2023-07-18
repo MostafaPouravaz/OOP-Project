@@ -27,6 +27,14 @@ public class Order {
             allOrders = new ArrayList<>(loadOrderFromFile());
         return orderedFoods;
     }
+    public static ArrayList<Order> getOrdersWithCustomerID(int ID){
+        ArrayList<Order> orders = new ArrayList<>();
+        for(int i=0 ; i<allOrders.size() ; i++)
+            if(allOrders.get(i).customerID==ID)
+                orders.add(allOrders.get(i));
+
+        return orders;
+    }
 
     private int orderID;
     private int customerID;
@@ -66,6 +74,7 @@ public class Order {
 
     private int finalPrice = 0;
     //private int offPercent;
+
     private static int counterID = 0;
 
     public static ArrayList<Order> getAllOrders() {
