@@ -25,9 +25,6 @@ public class MainController extends Controller{
 
         return MainController.instance;
     }
-    public ArrayList<Restaurant> handleShowRestaurants() {
-        return Restaurant.getAllRestaurant();
-    }
     public ArrayList<Food> handleShowFoods() {
         return MainMenu.getCurrentRestaurant().getFoods();
     }

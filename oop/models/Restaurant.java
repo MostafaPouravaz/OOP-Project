@@ -242,7 +242,7 @@ public class Restaurant {
             allRestaurant = new ArrayList<>();
             if (allR != null)
                 allRestaurant.addAll(allR);
-            ID_Counter = allRestaurant.size();
+            ID_Counter = allRestaurant.size()+1;
         } catch (IOException e) {
             System.out.println(" ");
         }

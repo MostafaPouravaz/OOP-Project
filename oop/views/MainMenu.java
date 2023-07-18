@@ -225,7 +225,7 @@ public class MainMenu extends Menu{
     }
 
     private void showRestaurants() {
-        ArrayList<Restaurant> allRestaurants = this.controller.handleShowRestaurants();
+        ArrayList<Restaurant> allRestaurants = Restaurant.getVendorsRestaurant(getLoggedInUser().getUserId());
         if (allRestaurants == null){
             System.out.println("you have no Restaurant\nplease add restaurant first");
             this.addRestaurant();
@@ -658,7 +658,7 @@ public class MainMenu extends Menu{
     }
 
     private void showRestaurantsForCustomer() {
-        ArrayList<Restaurant> allRestaurants = this.controller.handleShowRestaurants();
+        ArrayList<Restaurant> allRestaurants = Restaurant.getAllRestaurant();
         System.out.println("0. back");
         System.out.println("Restaurants list :");
         for (Restaurant allRestaurant : allRestaurants)
