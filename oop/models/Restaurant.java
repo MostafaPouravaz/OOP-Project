@@ -82,6 +82,12 @@ public class Restaurant {
     public ArrayList<Integer> getFoodTypes() {
         if (loadRestaurantFromFile() != null)
             allRestaurant = new ArrayList<>(loadRestaurantFromFile());
+        if (foodTypes.size() ==0)
+            foodTypes = new ArrayList<>();
+        for (int i=0; i<getFoods().size(); i++){
+            if (!foodTypes.contains(getFoods().get(i).foodTypeID))
+                foodTypes.add(getFoods().get(i).foodTypeID);
+        }
         return foodTypes;
     }
 
@@ -102,6 +108,17 @@ public class Restaurant {
     public ArrayList<Food> getFoods() {
         if (loadRestaurantFromFile() != null)
             allRestaurant = new ArrayList<>(loadRestaurantFromFile());
+        if (foods.size() == 0)
+            foods = new ArrayList<>();
+        for (int i=0; i<Food.getAllFoods().size(); i++){
+            if (Food.getAllFoods().get(i).getID_restaurant() == getRestaurantID()) {
+                if (foods.size() == 0)
+                    foods.add(Food.getAllFoods().get(i));
+                for (int j = 0; j < foods.size(); j++) {
+                    if (!foods.contains(Food.getAllFoods().get(i)));
+                }
+            }
+        }
         return foods;
     }
 

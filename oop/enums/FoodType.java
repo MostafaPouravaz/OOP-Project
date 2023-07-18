@@ -7,7 +7,6 @@ public enum FoodType {
     APPETIZER,
     OTHER;
 
-
     public static FoodType getFoodTypeFromInt(int foodTypeID) {
         return switch (foodTypeID) {
             case 0 -> FASTFOOD;

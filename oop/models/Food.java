@@ -69,7 +69,7 @@ public class Food {
     }
 
     public static ArrayList<Food> getAllFoods() {
-        if (loadFoodFromFile() != null)
+        if (loadFoodFromFile().size() != 0)
             allFoods = new ArrayList<>(loadFoodFromFile());
         return Food.allFoods;
     }
