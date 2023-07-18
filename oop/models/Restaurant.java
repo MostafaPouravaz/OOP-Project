@@ -20,10 +20,9 @@ public class Restaurant {
     private static ArrayList<Integer> foodTypes = new ArrayList<>();
     private static ArrayList<Food> foods = new ArrayList<>();
     private String name;
-    static int ID_Counter = 0;
+    private static int ID_Counter = 0;
     private int RestaurantID;
     private int finalRate;
-
     private int ID_Owner;
     private int locationNode;
 

@@ -715,6 +715,7 @@ public class MainMenu extends Menu{
         }
     }
     private void showAllFoodForCustomer(){
+        System.out.println("0. back");
         ArrayList<Food> allFoods = this.controller.handleShowFoods();
         System.out.println("Foods list :");
         for (Food allFood : allFoods)
@@ -726,7 +727,10 @@ public class MainMenu extends Menu{
     private void chooseFoodForCustomer(){
         String choice = this.getChoice();
 
-        setCurrentFood(controller.handleChooseFood(choice));
+        if(choice.equals("0"))
+            handleShowRestaurantOptionForCustomer();
+        else
+            setCurrentFood(controller.handleChooseFood(choice));
         this.handleShowFoodOptionForCustomer();
     }
 
@@ -841,7 +845,6 @@ public class MainMenu extends Menu{
     }
     private void handleAddFoodToCart(){
         currentCart.addFood(currentFood);
-        System.out.println(Message.SUCCESS);
         this.handleShowFoodOptionForCustomer();
     }
     private void searchFoodForCustomer(){
@@ -1029,6 +1032,7 @@ public class MainMenu extends Menu{
             Customer loggedInUser = (Customer) Menu.getLoggedInUser();
             if(currentOrder.getFinalPrice()>=loggedInUser.getCharge()) {
                 System.out.println("please charge your account first");
+                this.run();
             }
             else {
                 System.out.println("where is your address ? (number of node) :");
