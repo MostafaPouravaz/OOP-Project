@@ -88,7 +88,8 @@ public class MainMenu extends Menu{
         System.out.println("6. charge account");
         System.out.println("7. display account charge");
         System.out.println("8. show estimated delivery time");
-        System.out.println("9. back");
+        System.out.println("9. our offer for you");
+        System.out.println("10. back");
     }
 
     private void handleCustomerChoice(String choice) throws IOException {
@@ -101,7 +102,8 @@ public class MainMenu extends Menu{
             case "6" -> this.handleChargeAccountForCustomer();
             case "7" -> this.handleDisplayAccountChargeForCustomer();
             case "8" -> this.handleShowEstimatedDeliveryTime();
-            case "9" -> RegisterMenu.getInstance().run();
+            case "9" -> this.handleShowOffer();
+            case "10" -> RegisterMenu.getInstance().run();
             default -> System.out.println(Message.INVALID_CHOICE);
         }
     }
@@ -1048,6 +1050,61 @@ public class MainMenu extends Menu{
                     default -> System.out.println(Message.INVALID_CHOICE);
                 }
             }
+        }
+    }
+    private void handleShowOffer(){
+        System.out.println("0. back");
+
+        User loggedInUser = Menu.getLoggedInUser();
+        int fastFood = 0;
+        int iranianFood = 0;
+        int seaFood = 0 ;
+        int appetizer = 0 ;
+        int other = 0;
+
+        ArrayList<Order> orders = Order.getOrdersWithCustomerID(loggedInUser.getUserId());
+        for (int i=0 ; i< orders.size() ; i++)
+            for (int j=0 ; j<orders.get(i).getOrderedFoods().size() ; j++)
+                switch (orders.get(i).getOrderedFoods().get(j).getFoodTypeID()) {
+                    case 1 -> fastFood++;
+                    case 2 -> iranianFood++;
+                    case 3 -> seaFood++;
+                    case 4 -> appetizer++;
+                    case 5 -> other++;
+                    default -> {
+                    }
+                }
+
+        int foodType = fastFood;
+        if (iranianFood > foodType) {
+            foodType = iranianFood;
+        }
+        if (seaFood > foodType) {
+            foodType = seaFood;
+        }
+        if (appetizer > foodType) {
+            foodType = appetizer;
+        }
+        if (other > foodType) {
+            foodType = other;
+        }
+
+        for(int i=0 ; i<Restaurant.getAllRestaurant().size() ; i++)
+
+            for (int j=0 ; j<Restaurant.getAllRestaurant().get(i).getFoods().size() ; j++)
+
+                if(Restaurant.getAllRestaurant().get(i).getFoods().get(j).getFoodTypeID() == foodType)
+
+                    System.out.println(Restaurant.getAllRestaurant().get(i).getFoods().get(j).getID()
+                            +". " +Restaurant.getAllRestaurant().get(i).getFoods().get(j).getName());
+
+
+        String choice = this.getChoice();
+        if(choice.equals("0"))
+            this.run();
+        else {
+            setCurrentFood(controller.handleChooseFood(choice));
+            this.handleShowFoodOptionForCustomer();
         }
     }
     private void handleShowEstimatedDeliveryTime(){
