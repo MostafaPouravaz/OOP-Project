@@ -459,6 +459,39 @@ public class MainMenu extends Menu{
     }
     private void menu() {
         //name id price discount
+//        if (getCurrentRestaurant().getFoods() == null){
+//            System.out.println("there is no food\nplease add food");
+//            addFood();
+//        }else {
+//            int ID = getCurrentRestaurant().getRestaurantID();
+//            System.out.println("Menu : ");
+//            for (int i = 0; i<Food.foodsSort(ID).size(); i++){
+//                System.out.print((i+1)+ ". \nName: " + Food.foodsSort(ID).get(i).getName()+
+//                        " | ID: "+Food.foodsSort(ID).get(i).getID()+" | Price: "+ Food.foodsSort(ID).get(i).getPrice());
+//                if (Food.foodsSort(ID).get(i).isActive())
+//                    System.out.print(" | Active : YES");
+//                else System.out.print(" | Active: NO");
+//                if (Food.foodsSort(ID).get(i).discountActive())
+//                    System.out.print(" | discountActive : YES" + " | discount percent :" + Food.foodsSort(ID).get(i).getDiscount()+"%");
+//                else System.out.print(" | discountActive: NO");
+//                System.out.println();
+//            }
+//            System.out.println((Food.foodsSort(ID).size()+1)+". add food\n" +(Food.foodsSort(ID).size()+2) +". back\nchoose one");
+//            int j= Integer.parseInt(this.getChoice())-1;
+//            if (j>Food.foodsSort(ID).size()+1) {
+//                System.out.println(Message.INVALID_CHOICE);
+//                menu();
+//            }else if (j==Food.foodsSort(ID).size())
+//                addFood();
+//            else if (j==Food.foodsSort(ID).size()+1)
+//                showRestaurantOptions();
+//            else {
+//                setCurrentFood(Food.foodsSort(ID).get(j));
+//                foodMenu();
+//            }
+//        }
+//
+//
 
         if (getCurrentRestaurant().getFoods() == null){
             System.out.println("there is no food\nplease add food");
@@ -917,7 +950,7 @@ public class MainMenu extends Menu{
         User loggedInUser = Menu.getLoggedInUser();
         System.out.println("please type your ID comment");
         String choice = this.getChoice();
-        if(currentRestaurant.getAllComments().get(Integer.parseInt(choice)).getCustomerID() == loggedInUser.getUserId()) {
+        if(currentRestaurant.getAllComments().get(Integer.parseInt(choice)-1).getCustomerID() == loggedInUser.getUserId()) {
 
             System.out.println("please type your comment");
             choice = this.getChoice();
