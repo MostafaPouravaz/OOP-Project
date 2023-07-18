@@ -1079,11 +1079,11 @@ public class MainMenu extends Menu{
         for (Order order : orders)
             for (int j = 0; j < order.getOrderedFoods().size(); j++)
                 switch (order.getOrderedFoods().get(j).getFoodTypeID()) {
-                    case 1 -> fastFood++;
-                    case 2 -> iranianFood++;
-                    case 3 -> seaFood++;
-                    case 4 -> appetizer++;
-                    case 5 -> other++;
+                    case 0 -> fastFood++;
+                    case 1 -> iranianFood++;
+                    case 2 -> seaFood++;
+                    case 3 -> appetizer++;
+                    case 4 -> other++;
                     default -> {
                     }
                 }
