@@ -292,7 +292,8 @@ public class MainMenu extends Menu{
                 int num = Integer.parseInt(choice)-1;
                 System.out.println("Customer Name : " + Objects.requireNonNull(User.getUserByUserID(currentOrder.openOrders().get(num).getCustomerID())).getUsername()
                         +" | Destination node : " + currentOrder.openOrders().get(num).getDestinationNode() + " | Final price : " + currentOrder.openOrders().get(num).getFinalPrice()
-                        + "\nStatus : " + currentOrder.openOrders().get(num).getStatus() +" | Order confirmation time : " + currentOrder.openOrders().get(num).getStartTime() + " | Estimated order delivery time : " + currentOrder.openOrders().get(num).getStartTime().plusSeconds(currentOrder.openOrders().get(num).getEstimatedTime())
+                        + "\nStatus : " + currentOrder.openOrders().get(num).getStatus() +" | Order confirmation time : " + currentOrder.openOrders().get(num).getStartTime()
+                        + " | Estimated order delivery time : " + currentOrder.openOrders().get(num).getStartTime().plusSeconds(currentOrder.openOrders().get(num).getEstimatedTime())
                         +"\nOrdered Foods :");
                 for (int i=0; i<currentOrder.openOrders().get(num).getOrderedFoods().size(); i++){
                     System.out.println((i+1) + ". " + currentOrder.openOrders().get(num).getOrderedFoods().get(i).getName());
@@ -632,10 +633,16 @@ public class MainMenu extends Menu{
                 3. SeaFood
                 4. Appetizer
                 5. other""");
-            setCurrentFoodType(FoodType.getFoodTypeFromInt(Integer.parseInt(this.getChoice())-1));
+            int j = Integer.parseInt(this.getChoice().trim())-1;
             System.out.println("ARE YOU SURE YOU WANT TO CHANGE YOUR RESTAURANT TYPE?");
-            if (this.getChoice().equals("yes"))
+            if (this.getChoice().equals("yes")){
+                for (int i = 0; i < getCurrentRestaurant().getFoods().size(); i++) {
+                    if (getCurrentRestaurant().getFoods().get(i).getFoodTypeID() == getCurrentRestaurant().getFoodTypes().get(Integer.parseInt(choice.trim())-1))
+                        getCurrentRestaurant().getFoods().remove(i);
+                }
+                setCurrentFoodType(FoodType.getFoodTypeFromInt(j));
                 getCurrentRestaurant().editFoodType(Integer.parseInt(choice.trim())-1,getCurrentFoodType());
+            }
             else System.out.println("edit food type cancelled");
         }
         this.showRestaurantOptions();
