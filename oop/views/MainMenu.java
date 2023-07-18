@@ -875,7 +875,7 @@ public class MainMenu extends Menu{
         String choice = this.getChoice();
         ArrayList<Restaurant> allSearchedRestaurants = this.controller.handleSearchRestaurants(choice);
         System.out.println("0. search restaurant");
-        System.out.println("1.back");
+        System.out.println("10.back");
         for (Restaurant allSearchedRestaurant : allSearchedRestaurants)
             System.out.println(allSearchedRestaurant.getRestaurantID() + ". " + allSearchedRestaurant.getName());
 
@@ -885,7 +885,7 @@ public class MainMenu extends Menu{
         String choice = this.getChoice();
         if(choice.equals("0"))
             this.searchRestaurant();
-        else if(choice.equals("1"))
+        else if(choice.equals("10"))
             this.run();
         else {
             setCurrentRestaurant(controller.handleChooseRestaurant(choice));
