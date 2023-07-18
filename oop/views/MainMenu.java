@@ -274,7 +274,7 @@ public class MainMenu extends Menu{
             case "8" -> this.openOrders();
             case "9" -> this.menu();
             case "10" -> this.run();
-            default -> System.out.println(Message.INVALID_CHOICE);
+            default -> {System.out.println(Message.INVALID_CHOICE); showVendorOptions();}
         }
     }
 

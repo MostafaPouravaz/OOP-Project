@@ -16,6 +16,7 @@ import java.util.ArrayList;
 //edit setter getter
 //comment
 public class Food {
+
     private static ArrayList<RatingForFood> allRatings = new ArrayList<>();
     private static ArrayList<CommentForFood> allComments = new ArrayList<>();
     private static ArrayList<Food> allFoods = new ArrayList<>();
