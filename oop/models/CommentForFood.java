@@ -25,7 +25,7 @@ public class CommentForFood {
 
     public void setResponse(int commentID,String response) {
         this.response = response;
-        allComments.get(commentID-1).response = response;
+        allComments.get(commentID).response = response;
         saveFoodCommentToFile();
     }
 
@@ -52,7 +52,7 @@ public class CommentForFood {
 
     public void editComment(String comment) {
         this.Comment = comment;
-        allComments.get(this.getCommentID()-1).Comment = comment;
+        allComments.get(this.getCommentID()).Comment = comment;
         saveFoodCommentToFile();
     }
 
@@ -86,7 +86,7 @@ public class CommentForFood {
     public static CommentForFood getCommentByCommentID(int commentID) {
         if (loadFoodCommentFromFile() != null)
             allComments = new ArrayList<>(loadFoodCommentFromFile());
-        return allComments.get(commentID-1);
+        return allComments.get(commentID);
     }
     private void addComment(CommentForFood commentForFood) {
         if (loadFoodCommentFromFile() != null)

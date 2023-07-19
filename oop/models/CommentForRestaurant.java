@@ -26,7 +26,7 @@ public class CommentForRestaurant {
 
     public void setResponse(int commentID,String response) {
         this.response = response;
-        allComments.get(commentID-1).response = response;
+        allComments.get(commentID).response = response;
         saveRestaurantCommentToFile();
     }
 
@@ -53,7 +53,7 @@ public class CommentForRestaurant {
 
     public void editComment(String comment) {
         this.Comment = comment;
-        allComments.get(this.getCommentID()-1).Comment = comment;
+        allComments.get(this.getCommentID()).Comment = comment;
         saveRestaurantCommentToFile();
     }
 
