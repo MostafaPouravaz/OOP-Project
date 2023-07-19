@@ -129,12 +129,14 @@ public class Restaurant {
     public ArrayList<RatingForRestaurant> getAllRatings() {
         if (loadRestaurantFromFile() != null)
             allRestaurant = new ArrayList<>(loadRestaurantFromFile());
+        allRatings = RatingForRestaurant.getAllRatingsByRID(getRestaurantID());
         return allRatings;
     }
 
     public ArrayList<CommentForRestaurant> getAllComments() {
         if (loadRestaurantFromFile() != null)
             allRestaurant = new ArrayList<>(loadRestaurantFromFile());
+        allComments = CommentForRestaurant.getAllCommentsByRID(getRestaurantID());
         return allComments;
     }
 

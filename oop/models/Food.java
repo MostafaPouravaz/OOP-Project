@@ -89,16 +89,16 @@ public class Food {
     public boolean isDiscounted() {
         return isDiscounted;
     }
-    public static ArrayList<Food> getAllRestaurantFoods(int restaurantID) {
-        if (loadFoodFromFile().size() != 0)
-            allFoods = new ArrayList<>(loadFoodFromFile());
-        ArrayList<Food> foods = new ArrayList<>();
-        for (Food allFood : allFoods) {
-            if (allFood.getID_restaurant() == restaurantID)
-                foods.add(allFood);
-        }
-        return foods;
-    }
+//    public static ArrayList<Food> getAllRestaurantFoods(int restaurantID) {
+//        if (loadFoodFromFile().size() != 0)
+//            allFoods = new ArrayList<>(loadFoodFromFile());
+//        ArrayList<Food> foods = new ArrayList<>();
+//        for (Food allFood : allFoods) {
+//            if (allFood.getID_restaurant() == restaurantID)
+//                foods.add(allFood);
+//        }
+//        return foods;
+//    }
     public static ArrayList<Food> getAllFoods() {
         if (loadFoodFromFile().size() != 0)
             allFoods = new ArrayList<>(loadFoodFromFile());
