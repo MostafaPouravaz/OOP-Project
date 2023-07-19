@@ -45,7 +45,7 @@ public class Food {
             allFoods = new ArrayList<>(loadFoodFromFile());
         allRatings = RatingForFood.getAllRatingsByFID(ID);
         return allRatings;
-    }
+    }//
 
     public ArrayList<CommentForFood> getComments() {
         if (loadFoodFromFile() != null)
