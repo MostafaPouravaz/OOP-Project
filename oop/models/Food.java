@@ -54,6 +54,26 @@ public class Food {
         return allComments;
     }
 
+    public static ArrayList<Food> foodsSort(int ID){
+        ArrayList<Food> foods = new ArrayList<>();
+        for(int i = 0 ; i< allFoods.size() ; i++)
+            if(allFoods.get(i).getID_restaurant() == ID)
+                foods.add(allFoods.get(i));
+
+        return foods;
+    }
+
+    public static ArrayList<Food> getAllRestaurantFoods(int restaurantID) {
+        if (loadFoodFromFile().size() != 0)
+            allFoods = new ArrayList<>(loadFoodFromFile());
+        ArrayList<Food> foods = new ArrayList<>();
+        for (Food allFood : allFoods) {
+            if (allFood.getID_restaurant() == restaurantID)
+                foods.add(allFood);
+        }
+        return foods;
+    }
+
     public static int getIDCounter() {
         return IDCounter;
     }
