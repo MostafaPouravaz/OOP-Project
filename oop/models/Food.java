@@ -43,12 +43,14 @@ public class Food {
     public ArrayList<RatingForFood> getRatings() {
         if (loadFoodFromFile() != null)
             allFoods = new ArrayList<>(loadFoodFromFile());
+        allRatings = RatingForFood.getAllRatingsByFID(ID);
         return allRatings;
     }
 
     public ArrayList<CommentForFood> getComments() {
         if (loadFoodFromFile() != null)
             allFoods = new ArrayList<>(loadFoodFromFile());
+        allComments = CommentForFood.getAllCommentsByFID(getID());
         return allComments;
     }
 
@@ -67,7 +69,16 @@ public class Food {
     public boolean isDiscounted() {
         return isDiscounted;
     }
-
+    public static ArrayList<Food> getAllRestaurantFoods(int restaurantID) {
+        if (loadFoodFromFile().size() != 0)
+            allFoods = new ArrayList<>(loadFoodFromFile());
+        ArrayList<Food> foods = new ArrayList<>();
+        for (Food allFood : allFoods) {
+            if (allFood.getID_restaurant() == restaurantID)
+                foods.add(allFood);
+        }
+        return foods;
+    }
     public static ArrayList<Food> getAllFoods() {
         if (loadFoodFromFile().size() != 0)
             allFoods = new ArrayList<>(loadFoodFromFile());

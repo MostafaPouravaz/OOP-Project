@@ -73,6 +73,17 @@ public class CommentForRestaurant {
         }
         return null;
     }
+    public static ArrayList<CommentForRestaurant> getAllCommentsByRID(int restaurantID) {
+        ArrayList<CommentForRestaurant> allCommentsR = new ArrayList<>();
+        if (loadRestaurantCommentFromFile() != null)
+            allComments = new ArrayList<>(loadRestaurantCommentFromFile());
+
+        for (CommentForRestaurant allComment : allComments) {
+            if (allComment.getRestaurantID() == restaurantID)
+                allCommentsR.add(allComment);
+        }
+        return allCommentsR;
+    }
     public static CommentForRestaurant getCommentByCommentID(int commentID) {
         if (loadRestaurantCommentFromFile() != null)
             allComments = new ArrayList<>(loadRestaurantCommentFromFile());

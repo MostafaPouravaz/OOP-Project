@@ -50,6 +50,17 @@ public class RatingForRestaurant {
         }
         return null;
     }
+    public static ArrayList<RatingForRestaurant> getAllRatingsByRID(int restaurantID) {
+        ArrayList<RatingForRestaurant> allRatingsR = new ArrayList<>();
+        if (loadRestaurantRatingFromFile() != null)
+            allRatings = new ArrayList<>(loadRestaurantRatingFromFile());
+
+        for (RatingForRestaurant allRating : allRatings) {
+            if (allRating.getRestaurantID() == restaurantID)
+                allRatingsR.add(allRating);
+        }
+        return allRatingsR;
+    }
     private void addRating(RatingForRestaurant ratingForRestaurant) {
         if (loadRestaurantRatingFromFile() != null)
             allRatings = new ArrayList<>(loadRestaurantRatingFromFile());

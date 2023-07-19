@@ -227,7 +227,7 @@ public class MainMenu extends Menu{
 
     private void showRestaurants() {
         ArrayList<Restaurant> allRestaurants = Restaurant.getVendorsRestaurant(getLoggedInUser().getUserId());
-        if (allRestaurants == null){
+        if (allRestaurants.size() == 0){
             System.out.println("you have no Restaurant\nplease add restaurant first");
             this.addRestaurant();
         }
@@ -460,7 +460,7 @@ public class MainMenu extends Menu{
     private void menu() {
         //name id price discount
 
-        if (getCurrentRestaurant().getFoods() == null){
+        if (getCurrentRestaurant().getFoods().size()==0){
             System.out.println("there is no food\nplease add food");
             addFood();
         }else {

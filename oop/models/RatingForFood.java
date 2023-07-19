@@ -50,6 +50,17 @@ public class RatingForFood {
         }
         return null;
     }
+    public static ArrayList<RatingForFood> getAllRatingsByFID(int foodID) {
+        ArrayList<RatingForFood> allRatingsR = new ArrayList<>();
+        if (loadFoodRatingFromFile() != null)
+            allRatings = new ArrayList<>(loadFoodRatingFromFile());
+
+        for (RatingForFood allRating : allRatings) {
+            if (allRating.getFoodID() == foodID)
+                allRatingsR.add(allRating);
+        }
+        return allRatingsR;
+    }
     private void addRating(RatingForFood ratingForFood) {
         if (loadFoodRatingFromFile() != null)
             allRatings = new ArrayList<>(loadFoodRatingFromFile());

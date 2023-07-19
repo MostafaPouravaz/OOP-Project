@@ -72,6 +72,17 @@ public class CommentForFood {
         }
         return null;
     }
+    public static ArrayList<CommentForFood> getAllCommentsByFID(int foodID) {
+        ArrayList<CommentForFood> allCommentsR = new ArrayList<>();
+        if (loadFoodCommentFromFile() != null)
+            allComments = new ArrayList<>(loadFoodCommentFromFile());
+
+        for (CommentForFood allComment : allComments) {
+            if (allComment.getFoodID() == foodID)
+                allCommentsR.add(allComment);
+        }
+        return allCommentsR;
+    }
     public static CommentForFood getCommentByCommentID(int commentID) {
         if (loadFoodCommentFromFile() != null)
             allComments = new ArrayList<>(loadFoodCommentFromFile());
